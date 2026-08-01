@@ -28,7 +28,10 @@ export async function POST(req: NextRequest) {
         `${process.env.BACKEND_URL!.replace(/\/$/, "")}/api/checkout`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
           body: JSON.stringify({ token }),
         },
       );

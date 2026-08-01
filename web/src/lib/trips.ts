@@ -41,7 +41,11 @@ export async function fetchTrip(sessionId: string): Promise<Trip | null> {
       `${base.replace(/\/$/, "")}/api/trips/${sessionId}`,
       {
         next: { revalidate: 0 },
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          // Free ngrok interstitial page breaks server-side JSON fetches
+          "ngrok-skip-browser-warning": "true",
+        },
       },
     );
     if (!res.ok) return null;
