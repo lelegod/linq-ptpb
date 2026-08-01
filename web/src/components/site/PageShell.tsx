@@ -15,7 +15,7 @@ export function PageShell({
     <main className="min-h-[100svh] bg-[var(--paper)]">
       <Nav messagesHref={messagesHref} />
       <div
-        className={`page-enter mx-auto px-4 py-10 sm:px-6 md:py-14 ${
+        className={`page-enter mx-auto px-4 py-8 sm:px-6 sm:py-10 md:py-14 ${
           wide ? "max-w-5xl" : "max-w-3xl"
         }`}
       >

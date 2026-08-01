@@ -25,6 +25,8 @@ export const copy = {
   productHeading: "One agent that handles the trip for you",
   productSub:
     "Four texts. One trip. Integrations for DSB and more are coming.",
+  howItWorksHero:
+    "Danish transit via iMessage — one conversation instead of four apps.",
   integrationsHeading: "Integrations coming",
   integrationsBody:
     "Connect your DSB account and more — planning stays in Messages; tickets stay with the operators.",
@@ -82,17 +84,51 @@ export const productMenu = [
   {
     href: "/product",
     title: "How it works",
-    description: "Plan, pick a route, map & Buy on DSB, leave-now",
+    description: "The story — then watch the demo",
   },
   {
-    href: "/product#integrations",
-    title: "Integrations",
-    description: "DSB account and more — coming soon",
+    href: "/product#demo",
+    title: "Watch demo",
+    description: "Rejsy in Messages, end to end",
   },
   {
-    href: "/product#coverage",
-    title: "Coverage",
-    description: "DSB, S-tog, metro, Movia, DOT, Øresund",
+    href: "/product#how",
+    title: "The flow",
+    description: "Text → plan → ticket path",
+  },
+] as const;
+
+/** Narrative beats for /product — problem → punchline → product */
+export const storyBeats = {
+  scene: [
+    "Six in the morning. Just landed. Don't know how the country works.",
+    "32.4 million through CPH last year. Busiest in 100 years.",
+    "Only about a third were Danish.",
+  ],
+  mapsOpen: "Open Google Maps → it gives you a train.",
+  mapsLag:
+    "But: 2–7 days for a new route to show up. Their documentation, not our opinion.",
+  mapsBlind:
+    "Doesn't know about tonight's replacement bus. Can't tell you the platform.",
+  stack: "Times → Rejseplanen. Ticket → DSB. Zones → DOT.",
+  punchCoffee:
+    "Four apps, in a language you don't read, before you've had coffee.",
+  punchFour: "Four apps. One trip.",
+  friend: "But your friend who's done this trip before does it in one text.",
+} as const;
+
+export const howRejsyWorks = [
+  {
+    title: "Text the agent",
+    body: "Open Messages and say where you're going — “aarhus tomorrow around 9” is enough.",
+  },
+  {
+    title: "Get a plan",
+    body: "Rejsy replies with options: times, operator, price. Reply with a number to lock in.",
+  },
+  {
+    title: "Ticket path + leave-now",
+    body: "Open the map, Buy on DSB, and get a ping 25 minutes before — platform included.",
   },
 ] as const;
 

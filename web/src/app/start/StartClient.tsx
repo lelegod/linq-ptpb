@@ -91,19 +91,19 @@ export function StartClient() {
   }
 
   return (
-    <div className="relative mx-auto flex min-h-[calc(100svh-8rem)] max-w-md flex-col px-1 py-6 sm:py-10">
-      <div className="flex items-start justify-between">
-        <div>
+    <div className="relative mx-auto flex min-h-[calc(100svh-8rem)] max-w-md flex-col px-0 py-5 sm:px-1 sm:py-10">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <div
             className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--red)] text-[15px] font-semibold text-white"
             aria-hidden
           >
             R
           </div>
-          <p className="mt-5 font-display text-[20px] font-medium tracking-[-0.02em] text-[var(--ink)] sm:text-[22px]">
+          <p className="mt-5 font-display text-[18px] font-medium tracking-[-0.02em] text-[var(--ink)] sm:text-[22px]">
             {copy.waitlistWelcome}
           </p>
-          <h1 className="mt-1 font-display text-[28px] font-medium tracking-[-0.03em] text-[var(--slate)] sm:text-[32px]">
+          <h1 className="mt-1 font-display text-[24px] font-medium tracking-[-0.03em] text-[var(--slate)] sm:text-[32px]">
             {step === "details"
               ? copy.waitlistDetailsTitle
               : step === "email"
@@ -130,7 +130,7 @@ export function StartClient() {
         {step !== "done" && (
           <a
             href="/"
-            className="shrink-0 pt-1 text-[13px] text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+            className="inline-flex min-h-11 shrink-0 items-center pt-0.5 text-[13px] text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
           >
             {copy.waitlistLater}
           </a>
@@ -198,7 +198,7 @@ export function StartClient() {
               </p>
               <button
                 type="submit"
-                className="w-full rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+                className="min-h-12 w-full rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
               >
                 {copy.waitlistContinue}
               </button>
@@ -232,7 +232,7 @@ export function StartClient() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="min-h-12 w-full rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
             >
               {busy ? "Joining…" : copy.waitlistJoin}
             </button>
@@ -242,7 +242,7 @@ export function StartClient() {
                 setError(null);
                 setStep("details");
               }}
-              className="text-[13px] font-medium text-[var(--slate)] hover:text-[var(--ink)]"
+              className="inline-flex min-h-11 items-center text-[13px] font-medium text-[var(--slate)] hover:text-[var(--ink)]"
             >
               ← Back
             </button>
@@ -277,13 +277,13 @@ export function StartClient() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="/"
-                className="inline-flex flex-1 items-center justify-center rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Back to home
               </a>
               <a
                 href="/product"
-                className="inline-flex flex-1 items-center justify-center rounded-full border border-[var(--line)] bg-white py-3.5 text-[15px] font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--paper)]"
+                className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-[var(--line)] bg-white py-3.5 text-[15px] font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--paper)]"
               >
                 How it works
               </a>

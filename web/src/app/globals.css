@@ -32,6 +32,7 @@ html {
 html,
 body {
   overflow-x: clip;
+  max-width: 100%;
 }
 
 body {
@@ -39,6 +40,13 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Fraunces only for small italic brand accents */
@@ -214,6 +222,22 @@ body {
   animation: pageEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Punch lines on /product — slightly stronger settle */
+.punch-line {
+  text-wrap: balance;
+}
+
+/* Mobile comfort */
+.touch-row {
+  min-height: 44px;
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-pb {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
 .dropdown-open {
   opacity: 1;
   visibility: visible;
@@ -244,7 +268,8 @@ body {
   .fadeUp,
   .phoneIn,
   .train-exit,
-  .page-enter {
+  .page-enter,
+  .punch-line {
     animation: none;
     opacity: 1;
     transform: none;

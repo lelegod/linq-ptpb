@@ -17,14 +17,14 @@ export default function PricingPage() {
   return (
     <main className="min-h-[100svh] bg-[var(--paper)]">
       <Nav messagesHref={messagesHref} />
-      <div className="page-enter mx-auto max-w-4xl px-4 pt-10 sm:px-6 md:pt-14">
+      <div className="page-enter mx-auto max-w-4xl px-4 pt-8 sm:px-6 sm:pt-10 md:pt-14">
         <p className="font-data text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]">
           Pricing
         </p>
-        <h1 className="mt-3 text-[34px] font-semibold tracking-[-0.035em] sm:text-[44px]">
+        <h1 className="mt-3 text-[28px] font-semibold tracking-[-0.035em] sm:text-[34px] md:text-[44px]">
           Simple plans
         </h1>
-        <p className="mt-3 max-w-xl text-[16px] leading-[1.65] text-[var(--slate)]">
+        <p className="mt-3 max-w-xl text-[15px] leading-[1.65] text-[var(--slate)] sm:text-[16px]">
           {copy.pricingEyebrow}
         </p>
       </div>

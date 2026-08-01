@@ -34,8 +34,8 @@ export function Reveal({
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-[opacity,transform] duration-[700ms] ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none ${
-        shown ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+      className={`transition-[opacity,transform] duration-[800ms] ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       } ${className}`}
     >
       {children}

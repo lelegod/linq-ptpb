@@ -14,17 +14,17 @@ export default function FaqPage() {
       <p className="font-data text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]">
         Resources
       </p>
-      <h1 className="mt-3 text-[34px] font-semibold tracking-[-0.035em] sm:text-[42px]">
+      <h1 className="mt-3 text-[28px] font-semibold tracking-[-0.035em] sm:text-[34px] md:text-[42px]">
         Frequently asked questions
       </h1>
-      <p className="mt-3 text-[16px] leading-[1.65] text-[var(--slate)]">
+      <p className="mt-3 text-[15px] leading-[1.65] text-[var(--slate)] sm:text-[16px]">
         Straight answers about coverage, Messages, pricing, and privacy.
       </p>
 
-      <dl className="mt-10 divide-y divide-[var(--line)] border-y border-[var(--line)]">
+      <dl className="mt-8 divide-y divide-[var(--line)] border-y border-[var(--line)] sm:mt-10">
         {faqs.map((item) => (
-          <div key={item.q} className="py-6">
-            <dt className="text-[17px] font-semibold tracking-[-0.02em]">
+          <div key={item.q} className="py-5 sm:py-6">
+            <dt className="text-[16px] font-semibold tracking-[-0.02em] sm:text-[17px]">
               {item.q}
             </dt>
             <dd className="mt-2 text-[15px] leading-[1.65] text-[var(--slate)]">

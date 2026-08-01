@@ -1,27 +1,30 @@
 export function Footer() {
   return (
-    <footer className="px-4 py-10 sm:px-6">
-      <p className="text-center text-[13px] text-[var(--slate)]">
-        <span>rejsy.app</span>
-        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+    <footer className="safe-pb px-4 py-8 sm:px-6 sm:py-10">
+      <nav
+        className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-center text-[13px] text-[var(--slate)]"
+        aria-label="Footer"
+      >
+        <span className="px-2 py-2">rejsy.app</span>
+        <span className="text-[var(--muted)]" aria-hidden>
           ·
         </span>
         <a
           href="/privacy"
-          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+          className="inline-flex min-h-11 items-center px-2 underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
         >
           Privacy
         </a>
-        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+        <span className="text-[var(--muted)]" aria-hidden>
           ·
         </span>
         <a
           href="/terms"
-          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+          className="inline-flex min-h-11 items-center px-2 underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
         >
           Terms
         </a>
-      </p>
+      </nav>
     </footer>
   );
 }

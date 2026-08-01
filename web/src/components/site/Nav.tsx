@@ -102,8 +102,12 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
       className="relative z-40 border-b border-[var(--line)] bg-[var(--paper)]"
       aria-label="Primary"
     >
-      <div className="flex items-center justify-between px-4 py-3 sm:px-5 md:px-8">
-        <a href="/" className="flex items-center gap-2.5" aria-label="Rejsy home">
+      <div className="flex min-h-14 items-center justify-between px-4 py-2.5 sm:px-5 md:px-8">
+        <a
+          href="/"
+          className="flex min-h-11 items-center gap-2.5"
+          aria-label="Rejsy home"
+        >
           <span className="flex items-end gap-[3px]" aria-hidden>
             <span className="h-3 w-1 bg-[var(--red)] opacity-100" />
             <span className="h-3 w-1 bg-[var(--red)] opacity-55" />
@@ -209,22 +213,22 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <a
             href="/login"
-            className="hidden text-[12px] font-medium text-[var(--muted)] transition-colors hover:text-[var(--slate)] sm:inline"
+            className="hidden min-h-11 items-center text-[12px] font-medium text-[var(--muted)] transition-colors hover:text-[var(--slate)] sm:inline-flex"
           >
             {copy.navLogin}
           </a>
           <a
             href="/start"
-            className="rounded-[10px] bg-[var(--red)] px-3.5 py-2 text-[13px] font-semibold text-white transition-opacity hover:opacity-90 sm:px-4"
+            className="inline-flex min-h-10 items-center rounded-[10px] bg-[var(--red)] px-3.5 py-2 text-[13px] font-semibold text-white transition-opacity hover:opacity-90 sm:min-h-11 sm:px-4"
           >
             {copy.navStart}
           </a>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] text-[var(--ink)] md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-[var(--ink)] md:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
@@ -252,51 +256,51 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
 
       {/* Mobile drawer */}
       {mobileOpen ? (
-        <div className="border-t border-[var(--line)] bg-[var(--paper)] md:hidden">
-          <div className="page-enter space-y-1 px-4 py-3">
-            <p className="px-2 pb-1 font-data text-[10px] uppercase tracking-[0.08em] text-[var(--muted)]">
+        <div className="safe-pb border-t border-[var(--line)] bg-[var(--paper)] md:hidden">
+          <div className="page-enter max-h-[min(70vh,520px)] space-y-0.5 overflow-y-auto px-3 py-3">
+            <p className="px-3 pb-1.5 font-data text-[10px] uppercase tracking-[0.08em] text-[var(--muted)]">
               Product
             </p>
             {productMenu.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="block rounded-[8px] px-2 py-2.5"
+                className="block rounded-[10px] px-3 py-3"
                 onClick={() => setMobileOpen(false)}
               >
-                <span className="block text-[14px] font-semibold">
+                <span className="block text-[15px] font-semibold">
                   {item.title}
                 </span>
-                <span className="text-[12px] text-[var(--muted)]">
+                <span className="mt-0.5 block text-[12px] leading-snug text-[var(--muted)]">
                   {item.description}
                 </span>
               </a>
             ))}
             <a
               href="/pricing"
-              className="block rounded-[8px] px-2 py-2.5 text-[14px] font-semibold"
+              className="block rounded-[10px] px-3 py-3.5 text-[15px] font-semibold"
               onClick={() => setMobileOpen(false)}
             >
               Pricing
             </a>
-            <p className="px-2 pb-1 pt-3 font-data text-[10px] uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="px-3 pb-1.5 pt-3 font-data text-[10px] uppercase tracking-[0.08em] text-[var(--muted)]">
               Resources
             </p>
             {resourcesMenu.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="flex items-start gap-3 rounded-[8px] px-2 py-2.5"
+                className="flex items-start gap-3 rounded-[10px] px-3 py-3"
                 onClick={() => setMobileOpen(false)}
               >
                 <span className="mt-0.5 text-[var(--muted)]">
                   <MenuIcon kind={item.icon} />
                 </span>
                 <span>
-                  <span className="block text-[14px] font-semibold">
+                  <span className="block text-[15px] font-semibold">
                     {item.title}
                   </span>
-                  <span className="text-[12px] text-[var(--muted)]">
+                  <span className="mt-0.5 block text-[12px] leading-snug text-[var(--muted)]">
                     {item.description}
                   </span>
                 </span>
@@ -304,14 +308,14 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
             ))}
             <a
               href="/login"
-              className="mt-2 block rounded-[8px] px-2 py-2.5 text-[14px] font-semibold sm:hidden"
+              className="mt-1 block rounded-[10px] px-3 py-3.5 text-[15px] font-semibold sm:hidden"
               onClick={() => setMobileOpen(false)}
             >
               Login
             </a>
             <a
               href={messagesHref}
-              className="mt-1 block rounded-[8px] px-2 py-2.5 text-[13px] font-medium text-[var(--red)]"
+              className="mt-1 block rounded-[10px] px-3 py-3.5 text-[14px] font-medium text-[var(--red)]"
               onClick={() => setMobileOpen(false)}
             >
               Text Rejsy in Messages

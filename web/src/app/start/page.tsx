@@ -14,11 +14,11 @@ export default function StartPage() {
         className="pointer-events-none absolute inset-0 grid-bg opacity-80"
         aria-hidden
       />
-      <div className="page-enter relative z-10 mx-auto max-w-lg px-4 sm:px-6">
-        <div className="flex items-center justify-between pt-5">
+      <div className="page-enter relative z-10 mx-auto max-w-lg px-4 pb-8 sm:px-6 safe-pb">
+        <div className="flex min-h-12 items-center justify-between pt-4 sm:pt-5">
           <a
             href="/"
-            className="flex items-center gap-2.5"
+            className="flex min-h-11 items-center gap-2.5"
             aria-label="Rejsy home"
           >
             <span className="flex items-end gap-[3px]" aria-hidden>

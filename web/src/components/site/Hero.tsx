@@ -120,7 +120,7 @@ export function Hero({
   return (
     <section
       id="start"
-      className="relative overflow-x-clip px-4 pb-12 pt-8 sm:px-6 md:pb-16 md:pt-14"
+      className="relative overflow-x-clip px-4 pb-12 pt-6 sm:px-6 sm:pt-8 md:pb-16 md:pt-14"
     >
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden grid-bg"
@@ -130,7 +130,7 @@ export function Hero({
 
       <div className="relative z-10 mx-auto max-w-3xl text-center">
         <h1
-          className="fadeUp text-[32px] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[36px] md:text-[54px]"
+          className="fadeUp text-[28px] font-semibold leading-[1.1] tracking-[-0.04em] sm:text-[36px] md:text-[54px]"
           style={{ animationDelay: "0ms" }}
         >
           {copy.meet}{" "}
@@ -140,13 +140,13 @@ export function Hero({
           {copy.meetRest}
         </h1>
         <p
-          className="fadeUp mx-auto mt-3 max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:mt-4 sm:text-[16px] sm:leading-[1.65]"
+          className="fadeUp mx-auto mt-3 max-w-xl text-[15px] leading-[1.55] text-[var(--slate)] sm:mt-4 sm:text-[16px] sm:leading-[1.65]"
           style={{ animationDelay: "110ms" }}
         >
           {copy.subhead}
         </p>
         <p
-          className="fadeUp mx-auto mt-3 max-w-md font-data text-[11px] uppercase tracking-[0.06em] text-[var(--muted)] sm:text-[12px]"
+          className="fadeUp mx-auto mt-3 max-w-md px-1 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] sm:text-[12px]"
           style={{ animationDelay: "160ms" }}
         >
           {copy.proactiveLine}
@@ -154,27 +154,33 @@ export function Hero({
 
         {/* Mobile: CTA first so the fold is clean */}
         <div
-          className="fadeUp mt-6 flex flex-col items-center gap-2 md:hidden"
+          className="fadeUp mt-5 flex w-full flex-col items-center gap-2.5 md:hidden"
           style={{ animationDelay: "200ms" }}
         >
           <TextRejsyCta
             href={messagesHref}
             variant="red"
-            className="w-full max-w-sm"
+            className="w-full max-w-sm min-h-12"
           />
           <p className="font-data text-[10px] text-[var(--muted)] sm:text-[11px]">
             {copy.ctaNote}
           </p>
+          <a
+            href="/product"
+            className="inline-flex min-h-11 items-center text-[14px] font-medium text-[var(--slate)] underline decoration-[var(--line)] underline-offset-4"
+          >
+            {copy.ctaExplore}
+          </a>
         </div>
 
-        <div className="relative mx-auto mt-8 flex w-full max-w-[278px] flex-col items-center md:mt-10 md:max-w-[300px]">
+        <div className="relative mx-auto mt-7 flex w-full max-w-[250px] flex-col items-center sm:max-w-[278px] md:mt-10 md:max-w-[300px]">
           <div
-            className="phoneIn relative w-full rounded-[36px] border border-[var(--ink)] bg-[var(--ink)] p-[7px] sm:rounded-[42px] sm:p-[8px]"
+            className="phoneIn relative w-full rounded-[32px] border border-[var(--ink)] bg-[var(--ink)] p-[6px] sm:rounded-[42px] sm:p-[8px]"
             style={{ animationDelay: "260ms" }}
           >
-            <div className="overflow-hidden rounded-[30px] bg-[var(--paper)] sm:rounded-[34px]">
+            <div className="overflow-hidden rounded-[26px] bg-[var(--paper)] sm:rounded-[34px]">
               <div className="relative flex items-center justify-center border-b border-[var(--line)] px-3 pb-2 pt-3">
-                <div className="absolute left-1/2 top-1.5 h-3.5 w-16 -translate-x-1/2 rounded-full bg-[var(--ink)] sm:h-4 sm:w-20" />
+                <div className="absolute left-1/2 top-1.5 h-3 w-14 -translate-x-1/2 rounded-full bg-[var(--ink)] sm:h-4 sm:w-20" />
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--red)] text-[11px] font-semibold text-white">
                     R
@@ -209,7 +215,7 @@ export function Hero({
           <button
             type="button"
             onClick={() => setRun((n) => n + 1)}
-            className="mt-3 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] hover:text-[var(--slate)]"
+            className="mt-2 inline-flex min-h-10 items-center font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] hover:text-[var(--slate)]"
           >
             {copy.replay}
           </button>

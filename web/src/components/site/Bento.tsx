@@ -71,7 +71,7 @@ function IconDatabase() {
 
 function OutBubble({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 max-w-[260px] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+    <div className="mt-4 max-w-[min(100%,260px)] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
       {children}
     </div>
   );
@@ -79,7 +79,7 @@ function OutBubble({ children }: { children: React.ReactNode }) {
 
 function ProactiveBubble({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 max-w-[260px] rounded-[17px] rounded-bl-[6px] border border-white/35 bg-white/10 px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+    <div className="mt-4 max-w-[min(100%,260px)] rounded-[17px] rounded-bl-[6px] border border-white/35 bg-white/10 px-3 py-2 font-data text-[11px] leading-relaxed text-white">
       {children}
     </div>
   );
@@ -87,7 +87,7 @@ function ProactiveBubble({ children }: { children: React.ReactNode }) {
 
 export function Bento() {
   return (
-    <section className="bg-[var(--ink)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
+    <section className="overflow-x-clip bg-[var(--ink)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto max-w-5xl">
         <p className="font-data text-[11px] uppercase tracking-[0.06em] text-[var(--slate-inv)]">
           {copy.bentoLabel}
@@ -96,9 +96,9 @@ export function Bento() {
           {copy.bentoHeading}
         </h2>
 
-        <div className="mt-8 grid gap-[10px]">
-          <div className="grid gap-[10px] md:grid-cols-[1.45fr_1fr]">
-            <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
+        <div className="mt-7 grid gap-2.5 sm:mt-8 sm:gap-[10px]">
+          <div className="grid gap-2.5 sm:gap-[10px] md:grid-cols-[1.45fr_1fr]">
+            <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
               <div className="mb-3 text-white">
                 <IconMessage />
               </div>
@@ -120,8 +120,8 @@ export function Bento() {
               </OutBubble>
             </div>
 
-            <div className="grid gap-[10px]">
-              <div className="rounded-[14px] bg-[var(--red)] p-5 text-white">
+            <div className="grid gap-2.5 sm:gap-[10px]">
+              <div className="rounded-[14px] bg-[var(--red)] p-4 text-white sm:p-5">
                 <div className="mb-3">
                   <IconBell />
                 </div>
@@ -136,7 +136,7 @@ export function Bento() {
                   🕘 leave in 25 min — platform 3, københavn h
                 </ProactiveBubble>
               </div>
-              <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
+              <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
                 <div className="mb-3">
                   <IconDatabase />
                 </div>
@@ -156,8 +156,8 @@ export function Bento() {
             </div>
           </div>
 
-          <div className="grid gap-[10px] md:grid-cols-2">
-            <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
+          <div className="grid gap-2.5 sm:gap-[10px] md:grid-cols-2">
+            <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
               <div className="mb-3">
                 <IconMessage />
               </div>
@@ -171,7 +171,7 @@ export function Bento() {
                 got it — 3 options to odense before 17:00
               </OutBubble>
             </div>
-            <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
+            <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
               <div className="mb-3">
                 <IconTicket />
               </div>

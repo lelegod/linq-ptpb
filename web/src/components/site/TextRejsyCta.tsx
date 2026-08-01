@@ -97,7 +97,7 @@ export function TextRejsyCta({
     <a
       href={href}
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-[filter,opacity] active:opacity-90 ${styles[variant]} ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center gap-2.5 px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-[filter,opacity] active:opacity-90 ${styles[variant]} ${className}`}
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
