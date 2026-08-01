@@ -3,10 +3,11 @@ export const copy = {
   headline: ["The friend who knows", "every train in Denmark"] as const,
   subhead:
     "Text it where you're going. It plans, hands you the ticket, and tells you when to walk out the door.",
-  cta: "Open Rejsy on Linq",
+  cta: "Text Rejsy in Messages",
   ctaNote: "3 free trips · no card required · iPhone only",
+  qrHint: "scan to open Messages",
   navPricing: "Pricing",
-  navGetStarted: "Get started",
+  navGetStarted: "Text Rejsy",
   bentoLabel: "(1) Everything it does",
   bentoHeading: "Four apps, one thread.",
   bentoCaption: "Fig. 1  Five capabilities, one conversation.",

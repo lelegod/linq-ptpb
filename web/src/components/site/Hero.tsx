@@ -106,18 +106,14 @@ function ThreadBody() {
   );
 }
 
-export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
+export function Hero({
+  qrDataUrl,
+  messagesHref,
+}: {
+  qrDataUrl: string;
+  messagesHref: string;
+}) {
   const [run, setRun] = useState(0);
-  // Prefer real Linq profile; fall back to sms: so CTA opens Messages to the agent
-  const linqUrl =
-    process.env.NEXT_PUBLIC_LINQ_URL &&
-    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
-      ? process.env.NEXT_PUBLIC_LINQ_URL
-      : process.env.NEXT_PUBLIC_IMESSAGE_HREF &&
-          process.env.NEXT_PUBLIC_IMESSAGE_HREF.startsWith("sms:") &&
-          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
-        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
-        : "#";
 
   return (
     <section className="relative px-6 pb-16 pt-10 md:pt-14">
@@ -195,34 +191,33 @@ export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
           className="fadeUp mt-8 flex flex-col items-center gap-3"
           style={{ animationDelay: "4000ms" }}
         >
+          {/* Phone: tap opens Messages. Laptop: scan QR (same sms: payload). */}
           <a
-            href={linqUrl}
-            className="inline-flex items-center justify-center rounded-[10px] bg-[var(--red)] px-6 py-3 text-[15px] font-semibold text-white"
+            href={messagesHref}
+            className="inline-flex items-center justify-center rounded-[10px] bg-[var(--red)] px-6 py-3 text-[15px] font-semibold text-white md:hidden"
           >
             {copy.cta}
           </a>
-          <p className="font-data text-[11px] text-[var(--muted)]">
+          <p className="font-data text-[11px] text-[var(--muted)] md:hidden">
             {copy.ctaNote}
           </p>
-          {qrDataUrl ? (
-            <div className="mt-2 flex flex-col items-center gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={qrDataUrl}
-                alt="QR code to open Rejsy in Messages"
-                width={112}
-                height={112}
-                className="border border-[var(--line)] bg-[var(--paper)] p-2"
-              />
-              <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
-                scan on iphone · opens messages
-              </p>
-            </div>
-          ) : (
-            <p className="mt-2 max-w-xs font-data text-[10px] text-[var(--muted)]">
-              QR needs NEXT_PUBLIC_IMESSAGE_HREF (sms:+45… from Person A)
+
+          <div className="mt-2 hidden flex-col items-center gap-1.5 md:flex">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={qrDataUrl}
+              alt="QR code — scan on iPhone to open Rejsy in Messages"
+              width={140}
+              height={140}
+              className="border border-[var(--line)] bg-[var(--paper)] p-2"
+            />
+            <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
+              {copy.qrHint}
             </p>
-          )}
+            <p className="max-w-xs text-[13px] text-[var(--slate)]">
+              Point your iPhone camera at the code to text Rejsy.
+            </p>
+          </div>
         </div>
       </div>
     </section>

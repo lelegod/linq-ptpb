@@ -16,16 +16,7 @@ const plusFeatures = [
   "Cancel anytime",
 ];
 
-export function Pricing() {
-  const linqUrl =
-    process.env.NEXT_PUBLIC_LINQ_URL &&
-    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
-      ? process.env.NEXT_PUBLIC_LINQ_URL
-      : process.env.NEXT_PUBLIC_IMESSAGE_HREF?.startsWith("sms:") &&
-          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
-        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
-        : "#";
-
+export function Pricing({ messagesHref }: { messagesHref: string }) {
   return (
     <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">
       <div className="mx-auto max-w-4xl">
@@ -45,7 +36,7 @@ export function Pricing() {
               ))}
             </ul>
             <a
-              href={linqUrl}
+              href={messagesHref}
               className="mt-8 flex w-full items-center justify-center rounded-[10px] border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)]"
             >
               {copy.cta}

@@ -1,9 +1,10 @@
+const DEFAULT_BODY = "hi%20rejsy";
+
 /** True when a URL looks like a docs placeholder, not a real host. */
 export function isConfiguredUrl(value: string | undefined | null): value is string {
   if (!value) return false;
   const v = value.trim();
   if (!v || v === "#") return false;
-  // Fake defaults from .env.example / early deploys
   if (/YOUR-|XXXX|placeholder|example\.com|linq\.app\/rejsy/i.test(v)) return false;
   try {
     const u = new URL(v);
@@ -13,42 +14,60 @@ export function isConfiguredUrl(value: string | undefined | null): value is stri
   }
 }
 
-/** Valid sms: deep link to open Messages to the agent number. */
+/** Valid sms: deep link with a real-looking number (opens Messages). */
 export function isConfiguredSms(value: string | undefined | null): value is string {
   if (!value) return false;
   const v = value.trim();
   if (!v.startsWith("sms:")) return false;
   if (/YOUR-|XXXX|\+45X{4,}/i.test(v)) return false;
-  // Need a real number after sms: (E.164-ish digits)
   const rest = v.slice(4).split(/[?&]/)[0] ?? "";
   const digits = rest.replace(/\D/g, "");
   return digits.length >= 8;
 }
 
-/**
- * Desktop / button CTA: prefer Linq profile URL, else sms: to the agent.
- */
-export function getCtaTarget(): string {
-  const linq = process.env.NEXT_PUBLIC_LINQ_URL;
-  if (isConfiguredUrl(linq)) return linq;
-  const sms = process.env.NEXT_PUBLIC_IMESSAGE_HREF;
-  if (isConfiguredSms(sms)) return sms;
-  return "#";
+/** Build sms:+E164&body=… from a bare phone or full sms: href. */
+export function buildMessagesHref(raw?: string | null): string {
+  const fallback = `sms:+4520000000&body=${DEFAULT_BODY}`;
+  if (!raw?.trim()) return fallback;
+
+  const v = raw.trim();
+  if (v.startsWith("sms:")) {
+    if (isConfiguredSms(v)) {
+      // Ensure body is present for the demo opener
+      if (/[?&]body=/i.test(v)) return v;
+      const sep = v.includes("?") ? "&" : "&";
+      return `${v}${sep}body=${DEFAULT_BODY}`;
+    }
+    return fallback;
+  }
+
+  // Bare E.164 / national digits
+  const digits = v.replace(/[^\d+]/g, "");
+  if (digits.replace(/\D/g, "").length >= 8) {
+    const e164 = digits.startsWith("+") ? digits : `+${digits}`;
+    return `sms:${e164}&body=${DEFAULT_BODY}`;
+  }
+  return fallback;
 }
 
 /**
- * QR payload: must open the agent on iPhone → prefer sms: deep link.
- * Camera scan → Messages compose to Rejsy's Linq number.
+ * Always returns an sms: link that opens Messages (iPhone) / Messages.app (Mac).
+ * Prefers NEXT_PUBLIC_IMESSAGE_HREF, then NEXT_PUBLIC_LINQ_FROM_NUMBER / LINQ_FROM_NUMBER.
  */
+export function getMessagesHref(): string {
+  return buildMessagesHref(
+    process.env.NEXT_PUBLIC_IMESSAGE_HREF ||
+      process.env.NEXT_PUBLIC_LINQ_FROM_NUMBER ||
+      process.env.LINQ_FROM_NUMBER,
+  );
+}
+
+/** QR encodes the same Messages deep link as the mobile button. */
 export function getQrTarget(): string {
-  const sms = process.env.NEXT_PUBLIC_IMESSAGE_HREF;
-  if (isConfiguredSms(sms)) return sms;
-  const linq = process.env.NEXT_PUBLIC_LINQ_URL;
-  if (isConfiguredUrl(linq)) return linq;
-  return "";
+  return getMessagesHref();
 }
 
-/** @deprecated use getCtaTarget / getQrTarget */
-export function getLinqTarget(): string {
-  return getCtaTarget() === "#" ? "https://linq.app/rejsy" : getCtaTarget();
+/** Desktop optional profile link — not used for the primary Messages CTA. */
+export function getCtaTarget(): string {
+  return getMessagesHref();
 }

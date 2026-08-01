@@ -1,15 +1,6 @@
 import { copy } from "@/content/copy";
 
-export function Nav() {
-  const linqUrl =
-    process.env.NEXT_PUBLIC_LINQ_URL &&
-    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
-      ? process.env.NEXT_PUBLIC_LINQ_URL
-      : process.env.NEXT_PUBLIC_IMESSAGE_HREF?.startsWith("sms:") &&
-          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
-        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
-        : "#";
-
+export function Nav({ messagesHref }: { messagesHref: string }) {
   return (
     <nav className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-5 py-3 md:px-8">
       <a href="/" className="flex items-center gap-2.5">
@@ -30,7 +21,7 @@ export function Nav() {
           {copy.navPricing}
         </a>
         <a
-          href={linqUrl}
+          href={messagesHref}
           className="rounded-[10px] bg-[var(--red)] px-3 py-1.5 text-[12px] font-semibold text-white"
         >
           {copy.navGetStarted}
