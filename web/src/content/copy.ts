@@ -84,7 +84,7 @@ export const productMenu = [
   {
     href: "/product",
     title: "How it works",
-    description: "The story — then watch the demo",
+    description: "Demo + four steps in Messages",
   },
   {
     href: "/product#demo",
@@ -93,42 +93,8 @@ export const productMenu = [
   },
   {
     href: "/product#how",
-    title: "The flow",
-    description: "Text → plan → ticket path",
-  },
-] as const;
-
-/** Narrative beats for /product — problem → punchline → product */
-export const storyBeats = {
-  scene: [
-    "Six in the morning. Just landed. Don't know how the country works.",
-    "32.4 million through CPH last year. Busiest in 100 years.",
-    "Only about a third were Danish.",
-  ],
-  mapsOpen: "Open Google Maps → it gives you a train.",
-  mapsLag:
-    "But: 2–7 days for a new route to show up. Their documentation, not our opinion.",
-  mapsBlind:
-    "Doesn't know about tonight's replacement bus. Can't tell you the platform.",
-  stack: "Times → Rejseplanen. Ticket → DSB. Zones → DOT.",
-  punchCoffee:
-    "Four apps, in a language you don't read, before you've had coffee.",
-  punchFour: "Four apps. One trip.",
-  friend: "But your friend who's done this trip before does it in one text.",
-} as const;
-
-export const howRejsyWorks = [
-  {
-    title: "Text the agent",
-    body: "Open Messages and say where you're going — “aarhus tomorrow around 9” is enough.",
-  },
-  {
-    title: "Get a plan",
-    body: "Rejsy replies with options: times, operator, price. Reply with a number to lock in.",
-  },
-  {
-    title: "Ticket path + leave-now",
-    body: "Open the map, Buy on DSB, and get a ping 25 minutes before — platform included.",
+    title: "Four steps",
+    description: "Plan → pick → map & buy → leave-now",
   },
 ] as const;
 

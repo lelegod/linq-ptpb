@@ -2,15 +2,14 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { DemoPhone } from "@/components/site/DemoPhone";
-import { HowItWorksStory } from "@/components/site/HowItWorksStory";
-import { Coverage } from "@/components/site/Coverage";
+import { ProductSection } from "@/components/site/ProductSection";
 import { copy } from "@/content/copy";
 import { getMessagesHref } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "How it works",
   description:
-    "How Rejsy works — Danish transit in iMessage. Four apps become one text. Watch the demo, then join the waitlist.",
+    "How Rejsy works — Danish transit in iMessage. Watch the demo, follow four steps, then join the waitlist.",
 };
 
 export default function ProductPage() {
@@ -49,16 +48,13 @@ export default function ProductPage() {
         </div>
       </header>
 
-      {/* 2. Demo first */}
+      {/* 2. Demo */}
       <DemoPhone compact />
 
-      {/* 3–4. Problem story + brief how it works */}
-      <HowItWorksStory />
+      {/* 3. Four steps */}
+      <ProductSection showIntegrations={false} />
 
-      {/* Soft coverage line — not a card grid */}
-      <Coverage />
-
-      {/* 5. CTA */}
+      {/* 4. Waitlist CTA */}
       <section className="border-t border-[var(--line)] px-4 py-16 text-center sm:px-6 md:py-20">
         <p className="text-[22px] font-semibold tracking-[-0.03em] text-[var(--ink)] sm:text-[26px]">
           Ready when you are.
@@ -74,7 +70,7 @@ export default function ProductPage() {
         </a>
       </section>
 
-      {/* 6. Minimal footer */}
+      {/* 5. Minimal footer */}
       <Footer />
     </main>
   );

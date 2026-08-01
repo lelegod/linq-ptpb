@@ -222,11 +222,6 @@ video {
   animation: pageEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Punch lines on /product — slightly stronger settle */
-.punch-line {
-  text-wrap: balance;
-}
-
 /* Mobile comfort */
 .touch-row {
   min-height: 44px;
@@ -268,8 +263,7 @@ video {
   .fadeUp,
   .phoneIn,
   .train-exit,
-  .page-enter,
-  .punch-line {
+  .page-enter {
     animation: none;
     opacity: 1;
     transform: none;
