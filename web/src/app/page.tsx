@@ -1,6 +1,6 @@
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { ProductSection } from "@/components/site/ProductSection";
+import { Bento } from "@/components/site/Bento";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
 import { linqQrDataUrl } from "@/lib/qr";
@@ -15,7 +15,7 @@ export default async function HomePage() {
       <Nav messagesHref={messagesHref} />
       <Hero qrDataUrl={qrDataUrl} messagesHref={messagesHref} />
       <Reveal delay={60}>
-        <ProductSection showIntegrations={false} />
+        <Bento />
       </Reveal>
       <Footer />
     </main>
