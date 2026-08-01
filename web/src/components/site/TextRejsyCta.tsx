@@ -41,18 +41,18 @@ function MiniTrain({ className = "" }: { className?: string }) {
       />
       <circle cx="5" cy="11.5" r="1.5" fill="currentColor" />
       <circle cx="13" cy="11.5" r="1.5" fill="currentColor" />
-      <rect x="3" y="4" width="3" height="3" rx="0.5" fill="var(--butter)" />
-      <rect x="8" y="4" width="3" height="3" rx="0.5" fill="var(--butter)" />
+      <rect x="3" y="4" width="3" height="3" rx="0.5" fill="var(--paper)" />
+      <rect x="8" y="4" width="3" height="3" rx="0.5" fill="var(--paper)" />
     </svg>
   );
 }
 
-type Variant = "butter" | "ink" | "ghost";
+type Variant = "red" | "butter" | "ink" | "ghost";
 
 export function TextRejsyCta({
   href,
   label,
-  variant = "butter",
+  variant = "red",
   className = "",
   showTrain = true,
 }: {
@@ -66,12 +66,16 @@ export function TextRejsyCta({
   const lock = useRef(false);
 
   const styles: Record<Variant, string> = {
+    red: "rounded-[10px] bg-[var(--red)] text-white hover:opacity-90",
     butter:
-      "bg-[var(--butter)] text-[var(--butter-ink)] soft-lift hover:brightness-[0.98]",
-    ink: "bg-[var(--ink)] text-white soft-lift hover:opacity-90",
+      "rounded-full bg-[var(--butter)] text-[var(--butter-ink)] soft-lift hover:brightness-[0.98]",
+    ink: "rounded-[10px] bg-[var(--ink)] text-white hover:opacity-90",
     ghost:
-      "bg-white/80 text-[var(--ink)] ring-1 ring-[var(--line)] soft-lift hover:bg-white",
+      "rounded-[10px] bg-[var(--paper)] text-[var(--ink)] ring-1 ring-[var(--line)] hover:bg-white",
   };
+
+  const trainClass =
+    variant === "butter" ? "text-[var(--butter-ink)]" : "text-white";
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (lock.current) {
@@ -93,7 +97,7 @@ export function TextRejsyCta({
     <a
       href={href}
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-[filter,opacity] ${styles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-[filter,opacity] active:opacity-90 ${styles[variant]} ${className}`}
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
@@ -103,19 +107,11 @@ export function TextRejsyCta({
               exiting ? "train-exit" : ""
             }`}
           >
-            <MiniTrain
-              className={
-                variant === "ink" ? "text-white" : "text-[var(--butter-ink)]"
-              }
-            />
+            <MiniTrain className={trainClass} />
           </span>
         </span>
       ) : (
-        <span
-          className={
-            variant === "ink" ? "text-[var(--start-ring)]" : "opacity-80"
-          }
-        >
+        <span className={variant === "ink" ? "text-[var(--red)]" : "opacity-90"}>
           <ChatIcon />
         </span>
       )}

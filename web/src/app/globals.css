@@ -3,14 +3,13 @@
 :root {
   --red: #c8102e;
   --ink: #0b0b0c;
-  --slate: #5c5c62;
-  --muted: #8a8780;
+  --slate: #6b6b70;
+  --muted: #9a978f;
   --paper: #fdfbf7;
   --sky: #dceaf4;
-  --sky-mid: #b8d0e4;
   --butter: #f5d76e;
   --butter-ink: #1a1608;
-  --line: #e4e0d8;
+  --line: #e8e4dc;
   --card-dark: #17171a;
   --slate-inv: #8a8a90;
   --bubble: #007aff;
@@ -20,8 +19,8 @@
   --delayed: #e07b00;
   --red-soft: #ffd3d9;
   --fig: #4a4a4e;
-  --login-ring: #7eb8d8;
-  --start-ring: #8bc34a;
+  --login-ring: #e8e4dc;
+  --start-ring: #c8102e;
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 }
@@ -42,25 +41,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Fraunces only for small italic brand accents */
 .font-display {
   font-family: var(--font-display);
 }
 
 .font-data {
   font-family: var(--font-plex-mono), ui-monospace, monospace;
-}
-
-/* —— Airy hero wash (Poke / emailed sky, no photo weight) —— */
-.hero-sky {
-  background:
-    radial-gradient(ellipse 120% 80% at 50% -10%, #f7fbfe 0%, transparent 55%),
-    linear-gradient(
-      180deg,
-      #e8f2f9 0%,
-      #d4e5f2 28%,
-      #eef3f0 58%,
-      var(--paper) 88%
-    );
 }
 
 @keyframes pop {
@@ -187,7 +174,25 @@ body {
   animation: trackPulse 1.2s linear infinite;
 }
 
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(200, 16, 46, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 11, 12, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    #000 35%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    #000 35%,
+    transparent 100%
+  );
+}
+
 .product-dropdown {
+  border: 1px solid var(--line);
   box-shadow: 0 12px 40px rgba(11, 11, 12, 0.08);
 }
 

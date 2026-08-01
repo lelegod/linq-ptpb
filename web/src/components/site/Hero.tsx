@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { copy } from "@/content/copy";
 import { TextRejsyCta } from "@/components/site/TextRejsyCta";
-import { TransitCollage } from "@/components/site/TransitCollage";
-import { ScrollTrain } from "@/components/site/ScrollTrain";
+import { TrainAccent } from "@/components/site/TrainAccent";
 
 const thread = {
   user1: "aarhus tomorrow around 9",
@@ -86,6 +85,7 @@ function ThreadBody() {
   return (
     <div className="flex flex-col gap-1.5 px-3 pb-4 pt-2">
       <Inbound delay={620}>{thread.user1}</Inbound>
+
       <div
         className="typing flex justify-start"
         style={{ ["--hide" as string]: "1500ms", animationDelay: "900ms" }}
@@ -96,6 +96,7 @@ function ThreadBody() {
           <span className="dot" style={{ animationDelay: "300ms" }} />
         </div>
       </div>
+
       <Outbound delay={1900} mono>
         {thread.options}
       </Outbound>
@@ -119,68 +120,57 @@ export function Hero({
   return (
     <section
       id="start"
-      className="relative overflow-x-clip px-4 pb-0 pt-2 sm:px-6 md:pt-4"
+      className="relative overflow-x-clip px-4 pb-12 pt-8 sm:px-6 md:pb-16 md:pt-14"
     >
-      <ScrollTrain />
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden grid-bg"
+        aria-hidden
+      />
+      <TrainAccent />
 
-      <div className="relative mx-auto max-w-3xl text-center">
-        <p
-          className="fadeUp mx-auto inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1.5 text-[12px] text-[var(--slate)] ring-1 ring-[var(--line)] backdrop-blur-sm"
+      <div className="relative z-10 mx-auto max-w-3xl text-center">
+        <h1
+          className="fadeUp text-[32px] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[36px] md:text-[54px]"
           style={{ animationDelay: "0ms" }}
         >
-          <span className="rounded bg-[var(--red)] px-1.5 py-0.5 font-data text-[9px] uppercase tracking-[0.06em] text-white">
-            New
-          </span>
-          {copy.announcement}
-        </p>
-
-        <h1
-          className="fadeUp font-display mx-auto mt-6 max-w-[18ch] text-[34px] font-medium leading-[1.12] tracking-[-0.03em] text-[var(--ink)] sm:text-[44px] md:mt-8 md:text-[56px]"
-          style={{ animationDelay: "80ms" }}
-        >
           {copy.meet}{" "}
-          <em className="font-medium italic">{copy.brand}</em>
+          <em className="font-display font-medium italic text-[var(--red)]">
+            {copy.brand}
+          </em>
           {copy.meetRest}
         </h1>
-
         <p
-          className="fadeUp mx-auto mt-4 max-w-xl text-[15px] leading-[1.65] text-[var(--slate)] sm:text-[17px]"
-          style={{ animationDelay: "140ms" }}
+          className="fadeUp mx-auto mt-3 max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:mt-4 sm:text-[16px] sm:leading-[1.65]"
+          style={{ animationDelay: "110ms" }}
         >
           {copy.subhead}
         </p>
-
-        <div
-          className="fadeUp mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3"
-          style={{ animationDelay: "200ms" }}
-        >
-          <TextRejsyCta href={messagesHref} variant="butter" className="w-full max-w-xs sm:w-auto" />
-          <a
-            href="#product"
-            className="inline-flex w-full max-w-xs items-center justify-center rounded-full bg-white/80 px-6 py-3.5 text-[15px] font-semibold text-[var(--ink)] ring-1 ring-[var(--line)] soft-lift transition-colors hover:bg-white sm:w-auto"
-          >
-            {copy.ctaExplore}
-          </a>
-        </div>
         <p
-          className="fadeUp mt-3 font-data text-[10px] text-[var(--muted)] sm:text-[11px]"
-          style={{ animationDelay: "240ms" }}
+          className="fadeUp mx-auto mt-3 max-w-md font-data text-[11px] uppercase tracking-[0.06em] text-[var(--muted)] sm:text-[12px]"
+          style={{ animationDelay: "160ms" }}
         >
-          {copy.ctaNote}
+          {copy.proactiveLine}
         </p>
 
+        {/* Mobile: CTA first so the fold is clean */}
         <div
-          className="fadeUp mt-10 md:mt-12"
-          style={{ animationDelay: "280ms" }}
+          className="fadeUp mt-6 flex flex-col items-center gap-2 md:hidden"
+          style={{ animationDelay: "200ms" }}
         >
-          <TransitCollage href={messagesHref} />
+          <TextRejsyCta
+            href={messagesHref}
+            variant="red"
+            className="w-full max-w-sm"
+          />
+          <p className="font-data text-[10px] text-[var(--muted)] sm:text-[11px]">
+            {copy.ctaNote}
+          </p>
         </div>
 
-        {/* Phone peek — Poke / emailed style */}
-        <div className="relative mx-auto mt-10 flex w-full max-w-[280px] flex-col items-center md:mt-14 md:max-w-[300px]">
+        <div className="relative mx-auto mt-8 flex w-full max-w-[278px] flex-col items-center md:mt-10 md:max-w-[300px]">
           <div
             className="phoneIn relative w-full rounded-[36px] border border-[var(--ink)] bg-[var(--ink)] p-[7px] sm:rounded-[42px] sm:p-[8px]"
-            style={{ animationDelay: "320ms" }}
+            style={{ animationDelay: "260ms" }}
           >
             <div className="overflow-hidden rounded-[30px] bg-[var(--paper)] sm:rounded-[34px]">
               <div className="relative flex items-center justify-center border-b border-[var(--line)] px-3 pb-2 pt-3">
@@ -190,24 +180,31 @@ export function Hero({
                     R
                   </div>
                   <span className="text-[13px] font-semibold">{copy.name}</span>
-                  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>
-                    <circle cx="7" cy="7" r="7" fill="#007aff" />
-                    <path
-                      d="M4 7.2 6 9.2 10 4.8"
-                      stroke="#fff"
-                      strokeWidth="1.4"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </div>
               </div>
+
               <div key={run}>
                 <ThreadBody />
               </div>
             </div>
+
+            <div
+              className="fadeUp pointer-events-none absolute top-[70%] left-[calc(100%+12px)] hidden w-[7.5rem] text-left md:block"
+              style={{ animationDelay: "3700ms" }}
+            >
+              <div className="mb-1.5 h-[2px] w-2 bg-[var(--red)]" />
+              <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
+                {copy.annotation}
+              </p>
+            </div>
           </div>
+
+          <p
+            className="fadeUp mt-3 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] md:hidden"
+            style={{ animationDelay: "3700ms" }}
+          >
+            ↑ sent without being asked
+          </p>
 
           <button
             type="button"
@@ -218,22 +215,35 @@ export function Hero({
           </button>
         </div>
 
-        {/* Desktop QR — same sms payload */}
+        {/* Desktop: QR + Text CTA (same sms: payload) */}
         <div
-          className="fadeUp mt-8 hidden flex-col items-center gap-1.5 pb-10 md:flex"
-          style={{ animationDelay: "400ms" }}
+          className="fadeUp mt-8 hidden flex-col items-center gap-3 md:flex"
+          style={{ animationDelay: "4000ms" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={qrDataUrl}
             alt="QR code — scan on iPhone to open Rejsy in Messages"
-            width={120}
-            height={120}
-            className="rounded-xl border border-[var(--line)] bg-white p-2"
+            width={140}
+            height={140}
+            className="border border-[var(--line)] bg-[var(--paper)] p-2"
           />
           <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
             {copy.qrHint}
           </p>
+          <p className="max-w-xs text-[13px] text-[var(--slate)]">
+            Point your iPhone camera at the code to text Rejsy.
+          </p>
+          <TextRejsyCta href={messagesHref} variant="red" />
+          <p className="font-data text-[10px] text-[var(--muted)] sm:text-[11px]">
+            {copy.ctaNote}
+          </p>
+          <a
+            href="#product"
+            className="mt-1 text-[13px] font-medium text-[var(--slate)] underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--ink)]"
+          >
+            {copy.ctaExplore}
+          </a>
         </div>
       </div>
     </section>

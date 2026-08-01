@@ -55,7 +55,7 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
   return (
     <nav
       ref={root}
-      className="relative z-30 flex items-center justify-between px-4 py-4 sm:px-6 md:px-10"
+      className="relative z-30 flex items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-4 py-3 sm:px-5 md:px-8"
       aria-label="Primary"
     >
       <a href="/" className="flex items-center gap-2.5" aria-label="Rejsy home">
@@ -64,14 +64,14 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           <span className="h-3 w-1 bg-[var(--red)] opacity-55" />
           <span className="h-3 w-1 bg-[var(--red)] opacity-25" />
         </span>
-        <span className="font-display text-[22px] font-semibold italic tracking-[-0.03em]">
+        <span className="text-[15px] font-semibold tracking-[-0.02em]">
           rejsy
         </span>
       </a>
 
       <a
         href="#product"
-        className="text-[13px] font-medium text-[var(--ink)] md:hidden"
+        className="text-[12px] text-[var(--slate)] hover:text-[var(--ink)] md:hidden"
       >
         {copy.navProduct}
       </a>
@@ -79,10 +79,10 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
       <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">
         <button
           type="button"
-          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[14px] font-medium transition-colors ${
+          className={`inline-flex items-center gap-1.5 rounded-[10px] px-3 py-1.5 text-[13px] font-medium transition-colors ${
             open
               ? "bg-[var(--ink)] text-white"
-              : "text-[var(--ink)] hover:bg-white/50"
+              : "text-[var(--slate)] hover:text-[var(--ink)]"
           }`}
           aria-expanded={open}
           aria-controls={panelId}
@@ -111,21 +111,21 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           <div
             id={panelId}
             role="menu"
-            className="product-dropdown absolute left-1/2 top-[calc(100%+10px)] w-[min(92vw,340px)] -translate-x-1/2 rounded-[22px] bg-white p-5"
+            className="product-dropdown absolute left-1/2 top-[calc(100%+10px)] w-[min(92vw,340px)] -translate-x-1/2 rounded-[12px] bg-[var(--paper)] p-4"
           >
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               {productMenu.map((item) => (
                 <li key={item.href}>
                   <a
                     role="menuitem"
                     href={item.href}
-                    className="block rounded-xl px-1 py-0.5 hover:bg-[var(--paper)]"
+                    className="block rounded-[8px] px-2 py-1.5 hover:bg-white"
                     onClick={() => setOpen(false)}
                   >
-                    <span className="block text-[15px] font-semibold tracking-[-0.02em] text-[var(--ink)]">
+                    <span className="block text-[14px] font-semibold tracking-[-0.02em] text-[var(--ink)]">
                       {item.title}
                     </span>
-                    <span className="mt-0.5 block text-[13px] leading-snug text-[var(--muted)]">
+                    <span className="mt-0.5 block text-[12px] leading-snug text-[var(--muted)]">
                       {item.description}
                     </span>
                   </a>
@@ -136,14 +136,13 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
         )}
       </div>
 
-      {/* Tomo-like Login / Start — restrained, no rainbow orbs */}
       <div className="flex items-center gap-3 sm:gap-4">
         <a
           href="/login"
           className="group flex flex-col items-center gap-1"
           aria-label="Log in"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--login-ring)]/35 text-[var(--ink)] ring-1 ring-[var(--login-ring)]/50 transition-transform group-hover:scale-[1.03] sm:h-11 sm:w-11">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] bg-white text-[var(--ink)] transition-colors group-hover:border-[var(--red)]/40 sm:h-10 sm:w-10">
             <LoginIcon />
           </span>
           <span className="hidden text-[10px] font-medium text-[var(--slate)] sm:block">
@@ -155,14 +154,13 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           className="group flex flex-col items-center gap-1"
           aria-label="Start — text Rejsy"
           onClick={(e) => {
-            // Prefer direct messages on Start for mobile immediacy
             if (window.matchMedia("(max-width: 767px)").matches) {
               e.preventDefault();
               window.location.href = messagesHref;
             }
           }}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--start-ring)] text-white transition-transform group-hover:scale-[1.03] sm:h-11 sm:w-11">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--red)] text-white transition-opacity group-hover:opacity-90 sm:h-10 sm:w-10">
             <StartIcon />
           </span>
           <span className="hidden text-[10px] font-medium text-[var(--slate)] sm:block">
@@ -173,7 +171,7 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           <TextRejsyCta
             href={messagesHref}
             label={copy.ctaShort}
-            variant="ink"
+            variant="red"
             className="!px-4 !py-2.5 !text-[13px]"
             showTrain={false}
           />

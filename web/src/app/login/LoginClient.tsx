@@ -59,8 +59,8 @@ export function LoginClient() {
 
   if (!configured) {
     return (
-      <div className="rounded-[20px] border border-dashed border-[var(--line)] bg-white p-6 sm:p-8">
-        <h2 className="font-display text-[22px] font-medium tracking-[-0.02em]">
+      <div className="rounded-[12px] border border-dashed border-[var(--line)] bg-white p-6 sm:p-8">
+        <h2 className="text-[22px] font-semibold tracking-[-0.02em]">
           Supabase not configured
         </h2>
         <p className="mt-2 text-[14px] leading-[1.6] text-[var(--slate)]">
@@ -236,8 +236,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
         </div>
       )}
 
-      <div className="rounded-[20px] border border-dashed border-[var(--line)] bg-white/70 p-6">
-        <h2 className="font-display text-[20px] font-medium tracking-[-0.02em]">
+      <div className="rounded-[12px] border border-dashed border-[var(--red)]/35 bg-white p-6">
+        <h2 className="text-[20px] font-semibold tracking-[-0.02em]">
           Connected integrations
         </h2>
         <p className="mt-2 text-[13px] leading-[1.55] text-[var(--slate)]">
@@ -251,13 +251,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
           ].map((item) => (
             <li
               key={item.name}
-              className="flex items-center justify-between rounded-xl bg-[var(--paper)] px-4 py-3 ring-1 ring-[var(--line)]"
+              className="flex items-center justify-between rounded-[10px] border border-[var(--line)] bg-[var(--paper)] px-4 py-3"
             >
               <div>
                 <p className="text-[14px] font-semibold">{item.name}</p>
                 <p className="text-[12px] text-[var(--muted)]">{item.detail}</p>
               </div>
-              <span className="rounded-full bg-[var(--butter)]/50 px-2.5 py-1 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--butter-ink)]">
+              <span className="rounded-[8px] bg-[var(--red-soft)] px-2.5 py-1 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--red)]">
                 Soon
               </span>
             </li>

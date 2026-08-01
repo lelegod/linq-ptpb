@@ -37,9 +37,9 @@ export function Pricing({ messagesHref }: { messagesHref: string }) {
             </ul>
             <a
               href={messagesHref}
-              className="mt-8 flex w-full items-center justify-center rounded-full border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)]"
+              className="mt-8 flex w-full items-center justify-center rounded-[10px] border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)] hover:border-[var(--red)]/40"
             >
-              {copy.ctaShort}
+              {copy.cta}
             </a>
           </div>
 

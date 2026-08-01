@@ -29,7 +29,7 @@ export function ProductSection() {
         </p>
         <h2
           id="product-heading"
-          className="font-display mt-3 text-[28px] font-medium tracking-[-0.03em] text-[var(--ink)] sm:text-[36px]"
+          className="mt-3 text-[28px] font-semibold tracking-[-0.03em] text-[var(--ink)] sm:text-[36px]"
         >
           {copy.productHeading}
         </h2>
@@ -41,7 +41,7 @@ export function ProductSection() {
           {howItWorks.map((step) => (
             <li
               key={step.step}
-              className="flex flex-col rounded-[20px] border border-[var(--line)] bg-white p-4 sm:p-5"
+              className="flex flex-col rounded-[12px] border border-[var(--line)] bg-[var(--paper)] p-4 sm:p-5"
             >
               <span className="font-data text-[11px] text-[var(--muted)]">
                 {step.step}
@@ -59,9 +59,9 @@ export function ProductSection() {
 
         <div
           id="integrations"
-          className="scroll-mt-24 mt-12 rounded-[22px] border border-dashed border-[var(--line)] bg-white/60 px-5 py-6 sm:px-8"
+          className="scroll-mt-24 mt-12 rounded-[12px] border border-dashed border-[var(--red)]/35 bg-[var(--paper)] px-5 py-6 sm:px-8"
         >
-          <h3 className="font-display text-[22px] font-medium tracking-[-0.02em]">
+          <h3 className="text-[20px] font-semibold tracking-[-0.02em]">
             {copy.integrationsHeading}
           </h3>
           <p className="mt-2 max-w-2xl text-[14px] leading-[1.6] text-[var(--slate)] sm:text-[15px]">
@@ -71,10 +71,10 @@ export function ProductSection() {
             {["DSB account", "Rejsekort", "DOT / Movia"].map((name) => (
               <li
                 key={name}
-                className="rounded-full bg-[var(--paper)] px-3 py-1.5 text-[12px] font-medium text-[var(--slate)] ring-1 ring-[var(--line)]"
+                className="rounded-[10px] border border-[var(--line)] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--slate)]"
               >
                 {name}
-                <span className="ml-1.5 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--muted)]">
+                <span className="ml-1.5 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--red)]">
                   soon
                 </span>
               </li>
