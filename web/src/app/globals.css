@@ -3,10 +3,14 @@
 :root {
   --red: #c8102e;
   --ink: #0b0b0c;
-  --slate: #6b6b70;
-  --muted: #9a978f;
+  --slate: #5c5c62;
+  --muted: #8a8780;
   --paper: #fdfbf7;
-  --line: #e8e4dc;
+  --sky: #dceaf4;
+  --sky-mid: #b8d0e4;
+  --butter: #f5d76e;
+  --butter-ink: #1a1608;
+  --line: #e4e0d8;
   --card-dark: #17171a;
   --slate-inv: #8a8a90;
   --bubble: #007aff;
@@ -16,6 +20,14 @@
   --delayed: #e07b00;
   --red-soft: #ffd3d9;
   --fig: #4a4a4e;
+  --login-ring: #7eb8d8;
+  --start-ring: #8bc34a;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -26,12 +38,29 @@ body {
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
+.font-display {
+  font-family: var(--font-display);
+}
+
 .font-data {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+/* —— Airy hero wash (Poke / emailed sky, no photo weight) —— */
+.hero-sky {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, #f7fbfe 0%, transparent 55%),
+    linear-gradient(
+      180deg,
+      #e8f2f9 0%,
+      #d4e5f2 28%,
+      #eef3f0 58%,
+      var(--paper) 88%
+    );
 }
 
 @keyframes pop {
@@ -126,34 +155,66 @@ body {
   animation: phoneIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(11, 11, 12, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 11, 12, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 75% 65% at 50% 45%,
-    #000 35%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 75% 65% at 50% 45%,
-    #000 35%,
-    transparent 100%
-  );
+/* Train exits sideways before opening Messages */
+@keyframes trainExit {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(120%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(140%);
+    opacity: 0;
+  }
+}
+.train-exit {
+  animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes trackPulse {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.track-dash {
+  stroke-dasharray: 6 6;
+  animation: trackPulse 1.2s linear infinite;
+}
+
+.product-dropdown {
+  box-shadow: 0 12px 40px rgba(11, 11, 12, 0.08);
+}
+
+.soft-lift {
+  box-shadow: 0 2px 8px rgba(11, 11, 12, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .pop,
   .fadeUp,
-  .phoneIn {
+  .phoneIn,
+  .train-exit {
     animation: none;
     opacity: 1;
+    transform: none;
   }
   .typing {
     display: none;
   }
-  .dot {
+  .dot,
+  .track-dash {
     animation: none;
+  }
+  .scroll-train {
+    transform: none !important;
   }
 }

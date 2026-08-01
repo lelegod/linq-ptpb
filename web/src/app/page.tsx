@@ -1,7 +1,6 @@
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { ProblemStrip } from "@/components/site/ProblemStrip";
-import { Bento } from "@/components/site/Bento";
+import { ProductSection } from "@/components/site/ProductSection";
 import { Pricing } from "@/components/site/Pricing";
 import { Coverage } from "@/components/site/Coverage";
 import { Footer } from "@/components/site/Footer";
@@ -15,18 +14,17 @@ export default async function HomePage() {
 
   return (
     <main>
-      <Nav messagesHref={messagesHref} />
-      <Hero qrDataUrl={qrDataUrl} messagesHref={messagesHref} />
-      <Reveal delay={80}>
-        <ProblemStrip />
+      <div className="hero-sky min-h-[100svh]">
+        <Nav messagesHref={messagesHref} />
+        <Hero qrDataUrl={qrDataUrl} messagesHref={messagesHref} />
+      </div>
+      <Reveal delay={60}>
+        <ProductSection />
       </Reveal>
-      <Reveal delay={80}>
-        <Bento />
-      </Reveal>
-      <Reveal delay={80}>
+      <Reveal delay={60}>
         <Pricing messagesHref={messagesHref} />
       </Reveal>
-      <Reveal delay={80}>
+      <Reveal delay={60}>
         <Coverage />
       </Reveal>
       <Footer />
