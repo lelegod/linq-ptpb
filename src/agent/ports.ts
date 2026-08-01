@@ -41,6 +41,8 @@ export interface Db {
 
   /** Returns the new session id (uuid) — goes in the map-card URL. */
   createSession(tripId: string, chatId: string): Promise<string>;
+  /** Session → trip, for GET /api/trips/:sessionId (C's map page). */
+  getTripBySession(sessionId: string): Promise<Trip | null>;
 
   getRecentMessages(userId: string, n: number): Promise<MessageRow[]>;
   logMessage(userId: string, direction: 'in' | 'out', body: string, toolCalls?: unknown): Promise<void>;
@@ -192,6 +194,11 @@ export function createMemoryDb(): Db {
       const id = uuid();
       sessions.set(id, { trip_id, chat_id });
       return id;
+    },
+    async getTripBySession(sessionId) {
+      const s = sessions.get(sessionId);
+      if (!s) return null;
+      return trips.find((t) => t.id === s.trip_id) ?? null;
     },
     async getRecentMessages(userId, n) {
       return messages.filter((m) => m.user_id === userId).slice(-n);

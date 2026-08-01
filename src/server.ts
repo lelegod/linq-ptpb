@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import { handleInbound } from './routes/inbound';
 import { fireReminders, seedDemo } from './routes/admin';   // [B]
+import { getTripBySession } from './routes/trips';          // [B]
 import { startCrons } from './cron';                        // [B]
 import { getDeps } from './agent/deps';                     // [B]
 
@@ -19,6 +20,9 @@ app.get('/health', (_req, res) => {
 
 // Must match the target_url registered on the Linq webhook subscription.
 app.post('/api/inbound', handleInbound);
+
+// [B] consumed by C's map page (web/src/lib/trips.ts)
+app.get('/api/trips/:sessionId', getTripBySession);
 
 // [B] demo-time controls — token-gated via x-admin-token
 app.post('/api/admin/fire-reminders', fireReminders);
