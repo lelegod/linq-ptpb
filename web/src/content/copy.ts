@@ -9,7 +9,7 @@ export const copy = {
   navGetStarted: "Get started",
   bentoLabel: "(1) Everything it does",
   bentoHeading: "Four apps, one thread.",
-  bentoCaption: "Fig. 1  Six capabilities, one conversation.",
+  bentoCaption: "Fig. 1  Five capabilities, one conversation.",
   pricingEyebrow:
     "Cheaper than one København→Aarhus ticket, for every trip you ever take.",
   coverageLabel: "🇩🇰 works across denmark",

@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.PUBLIC_APP_URL || "https://web-gamma-sand-66.vercel.app",
+  ),
   title: "Rejsy — the friend who knows every train in Denmark",
   description:
     "Text a number. Get from A to B in Denmark. It plans, hands you the ticket, and pings you when to leave.",

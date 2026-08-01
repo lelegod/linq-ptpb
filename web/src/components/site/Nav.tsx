@@ -1,7 +1,7 @@
 import { copy } from "@/content/copy";
 
 export function Nav() {
-  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "#";
+  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL || "https://linq.app/rejsy";
 
   return (
     <nav className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-5 py-3 md:px-8">

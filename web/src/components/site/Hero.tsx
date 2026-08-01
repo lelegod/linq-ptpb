@@ -106,13 +106,16 @@ function ThreadBody() {
   );
 }
 
-export function Hero() {
+export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
   const [run, setRun] = useState(0);
-  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "#";
+  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "https://linq.app/rejsy";
 
   return (
-    <section className="relative overflow-hidden px-6 pb-16 pt-10 md:pt-14">
-      <div className="pointer-events-none absolute inset-0 grid-bg" aria-hidden />
+    <section className="relative px-6 pb-16 pt-10 md:pt-14">
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden grid-bg"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-3xl text-center">
         <h1
@@ -151,13 +154,13 @@ export function Hero() {
               </div>
             </div>
 
-            {/* desktop annotation */}
+            {/* desktop annotation — outside phone frame */}
             <div
-              className="fadeUp pointer-events-none absolute -right-36 top-[72%] hidden w-28 sm:block"
+              className="fadeUp pointer-events-none absolute top-[70%] left-[calc(100%+12px)] hidden w-[7.5rem] text-left sm:block"
               style={{ animationDelay: "3700ms" }}
             >
-              <div className="mb-1.5 h-0.5 w-2 bg-[var(--red)]" />
-              <p className="font-data text-left text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
+              <div className="mb-1.5 h-[2px] w-2 bg-[var(--red)]" />
+              <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
                 {copy.annotation}
               </p>
             </div>
@@ -180,7 +183,7 @@ export function Hero() {
         </div>
 
         <div
-          className="fadeUp mt-8 flex flex-col items-center gap-2"
+          className="fadeUp mt-8 flex flex-col items-center gap-3"
           style={{ animationDelay: "4000ms" }}
         >
           <a
@@ -192,6 +195,21 @@ export function Hero() {
           <p className="font-data text-[11px] text-[var(--muted)]">
             {copy.ctaNote}
           </p>
+          {qrDataUrl ? (
+            <div className="mt-2 flex flex-col items-center gap-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={qrDataUrl}
+                alt="QR code to open Rejsy on Linq"
+                width={96}
+                height={96}
+                className="border border-[var(--line)] bg-[var(--paper)] p-1"
+              />
+              <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
+                scan on iphone
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

@@ -17,7 +17,7 @@ const plusFeatures = [
 ];
 
 export function Pricing() {
-  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "#";
+  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL || "https://linq.app/rejsy";
 
   return (
     <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">

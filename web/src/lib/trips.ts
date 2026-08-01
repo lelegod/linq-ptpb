@@ -1,3 +1,4 @@
+import { isConfiguredUrl } from "@/lib/env";
 import type { Trip } from "@/types/trip";
 
 const MOCK: Trip = {
@@ -17,16 +18,24 @@ const MOCK: Trip = {
   ],
 };
 
+function useMock(sessionId: string): boolean {
+  if (process.env.MOCK_TRIPS === "1") return true;
+  // Demo-friendly: /map/test always works without Railway
+  if (sessionId === "test" || sessionId === "demo") return true;
+  return false;
+}
+
 export async function fetchTrip(sessionId: string): Promise<Trip | null> {
-  if (process.env.MOCK_TRIPS === "1") {
+  if (useMock(sessionId)) {
     return { ...MOCK, id: sessionId };
   }
 
   const base = process.env.BACKEND_URL;
-  if (!base) {
-    console.error("BACKEND_URL missing");
+  if (!isConfiguredUrl(base)) {
+    console.error("BACKEND_URL missing or placeholder");
     return null;
   }
+
   try {
     const res = await fetch(
       `${base.replace(/\/$/, "")}/api/trips/${sessionId}`,
@@ -37,7 +46,7 @@ export async function fetchTrip(sessionId: string): Promise<Trip | null> {
     );
     if (!res.ok) return null;
     const data = await res.json();
-    return normalizeTrip(sessionId, data);
+    return normalizeTrip(sessionId, data as Record<string, unknown>);
   } catch (e) {
     console.error(e);
     return null;
@@ -46,7 +55,7 @@ export async function fetchTrip(sessionId: string): Promise<Trip | null> {
 
 /** Adapt D's payload once — keep this the only mapping point. */
 function normalizeTrip(id: string, raw: Record<string, unknown>): Trip {
-  const stops = (raw.stops as Trip["stops"]) ?? [];
+  const stops = Array.isArray(raw.stops) ? (raw.stops as Trip["stops"]) : [];
   return {
     id,
     origin: String(raw.origin ?? raw.from ?? "Origin"),
@@ -66,4 +75,10 @@ function normalizeTrip(id: string, raw: Record<string, unknown>): Trip {
         : undefined,
     stops,
   };
+}
+
+export function staticMapUrl(stops: Trip["stops"]): string | null {
+  if (stops.length < 1) return null;
+  const mid = stops[Math.floor(stops.length / 2)] ?? stops[0];
+  return `https://www.openstreetmap.org/?mlat=${mid.lat}&mlon=${mid.lng}#map=8/${mid.lat}/${mid.lng}`;
 }

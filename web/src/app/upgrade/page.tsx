@@ -16,9 +16,9 @@ export default async function UpgradePage({
   if (token && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
     try {
       const resolved = await resolveUpgradeToken(token);
-      maskedPhone = maskPhone(resolved?.phone);
+      maskedPhone = maskPhone(resolved?.phone ?? null);
     } catch {
-      // show generic Plus card if resolve fails
+      // Generic Plus card — never crash the page without secrets/schema
     }
   }
 
