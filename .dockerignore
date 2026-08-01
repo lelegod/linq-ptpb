@@ -1,0 +1,21 @@
+node_modules
+.git
+.github
+.cursor
+.superpowers
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Frontend lives on Vercel — keep the Railway image small
+web
+docs
+*.md
+!README.md
+
+# Local / IDE noise
+.next
+out
+coverage
+*.log
