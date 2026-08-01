@@ -16,7 +16,11 @@ function RejsyBubble({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function ProductSection() {
+export function ProductSection({
+  showIntegrations = true,
+}: {
+  showIntegrations?: boolean;
+} = {}) {
   return (
     <section
       id="product"
@@ -57,30 +61,32 @@ export function ProductSection() {
           ))}
         </ol>
 
-        <div
-          id="integrations"
-          className="scroll-mt-24 mt-12 rounded-[12px] border border-dashed border-[var(--red)]/35 bg-[var(--paper)] px-5 py-6 sm:px-8"
-        >
-          <h3 className="text-[20px] font-semibold tracking-[-0.02em]">
-            {copy.integrationsHeading}
-          </h3>
-          <p className="mt-2 max-w-2xl text-[14px] leading-[1.6] text-[var(--slate)] sm:text-[15px]">
-            {copy.integrationsBody}
-          </p>
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {["DSB account", "Rejsekort", "DOT / Movia"].map((name) => (
-              <li
-                key={name}
-                className="rounded-[10px] border border-[var(--line)] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--slate)]"
-              >
-                {name}
-                <span className="ml-1.5 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--red)]">
-                  soon
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {showIntegrations ? (
+          <div
+            id="integrations"
+            className="scroll-mt-24 mt-12 rounded-[12px] border border-dashed border-[var(--red)]/35 bg-[var(--paper)] px-5 py-6 sm:px-8"
+          >
+            <h3 className="text-[20px] font-semibold tracking-[-0.02em]">
+              {copy.integrationsHeading}
+            </h3>
+            <p className="mt-2 max-w-2xl text-[14px] leading-[1.6] text-[var(--slate)] sm:text-[15px]">
+              {copy.integrationsBody}
+            </p>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {["DSB account", "Rejsekort", "DOT / Movia"].map((name) => (
+                <li
+                  key={name}
+                  className="rounded-[10px] border border-[var(--line)] bg-white px-3 py-1.5 text-[12px] font-medium text-[var(--slate)]"
+                >
+                  {name}
+                  <span className="ml-1.5 font-data text-[9px] uppercase tracking-[0.06em] text-[var(--red)]">
+                    soon
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     </section>
   );

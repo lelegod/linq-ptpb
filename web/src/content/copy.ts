@@ -22,7 +22,7 @@ export const copy = {
   navPricing: "Pricing",
   navGetStarted: "Get Started",
   productLabel: "Product",
-  productHeading: "How it works",
+  productHeading: "One agent that handles the trip for you",
   productSub:
     "Four texts. One trip. Integrations for DSB and more are coming.",
   integrationsHeading: "Integrations coming",

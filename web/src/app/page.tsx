@@ -15,7 +15,7 @@ export default async function HomePage() {
       <Nav messagesHref={messagesHref} />
       <Hero qrDataUrl={qrDataUrl} messagesHref={messagesHref} />
       <Reveal delay={60}>
-        <ProductSection />
+        <ProductSection showIntegrations={false} />
       </Reveal>
       <Footer />
     </main>
