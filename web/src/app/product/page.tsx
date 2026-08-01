@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { ProductSection } from "@/components/site/ProductSection";
+import { DemoPhone } from "@/components/site/DemoPhone";
 import { Coverage } from "@/components/site/Coverage";
 import { TextRejsyCta } from "@/components/site/TextRejsyCta";
 import { copy } from "@/content/copy";
@@ -34,16 +35,18 @@ export default function ProductPage() {
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <TextRejsyCta href={messagesHref} variant="red" />
             <a
-              href="/start"
+              href="#demo"
               className="rounded-[10px] px-5 py-3.5 text-[14px] font-semibold text-[var(--ink)] ring-1 ring-[var(--line)] transition-colors hover:bg-white"
             >
-              {copy.navGetStarted}
+              Watch demo
             </a>
           </div>
         </header>
       </div>
 
       <ProductSection />
+
+      <DemoPhone />
 
       <section id="coverage" className="scroll-mt-24">
         <Coverage />
