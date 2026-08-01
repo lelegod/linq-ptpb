@@ -1,4 +1,7 @@
 const DEFAULT_BODY = "hi%20rejsy";
+/** Team Rejsy Linq / iMessage agent — used by CTA + QR. */
+export const REJSY_AGENT_E164 = "+16695776525";
+const DEFAULT_MESSAGES_HREF = `sms:${REJSY_AGENT_E164}&body=${DEFAULT_BODY}`;
 
 /** True when a URL looks like a docs placeholder, not a real host. */
 export function isConfiguredUrl(value: string | undefined | null): value is string {
@@ -19,7 +22,7 @@ export function isConfiguredSms(value: string | undefined | null): value is stri
   if (!value) return false;
   const v = value.trim();
   if (!v.startsWith("sms:")) return false;
-  if (/YOUR-|XXXX|\+45X{4,}/i.test(v)) return false;
+  if (/YOUR-|XXXX|\+45X{4,}|\+4520000000/i.test(v)) return false;
   const rest = v.slice(4).split(/[?&]/)[0] ?? "";
   const digits = rest.replace(/\D/g, "");
   return digits.length >= 8;
@@ -27,27 +30,27 @@ export function isConfiguredSms(value: string | undefined | null): value is stri
 
 /** Build sms:+E164&body=… from a bare phone or full sms: href. */
 export function buildMessagesHref(raw?: string | null): string {
-  const fallback = `sms:+4520000000&body=${DEFAULT_BODY}`;
-  if (!raw?.trim()) return fallback;
+  if (!raw?.trim()) return DEFAULT_MESSAGES_HREF;
 
   const v = raw.trim();
   if (v.startsWith("sms:")) {
     if (isConfiguredSms(v)) {
       // Ensure body is present for the demo opener
       if (/[?&]body=/i.test(v)) return v;
-      const sep = v.includes("?") ? "&" : "&";
-      return `${v}${sep}body=${DEFAULT_BODY}`;
+      return `${v}&body=${DEFAULT_BODY}`;
     }
-    return fallback;
+    return DEFAULT_MESSAGES_HREF;
   }
 
   // Bare E.164 / national digits
   const digits = v.replace(/[^\d+]/g, "");
   if (digits.replace(/\D/g, "").length >= 8) {
     const e164 = digits.startsWith("+") ? digits : `+${digits}`;
+    // Reject old placeholder demo number
+    if (e164 === "+4520000000") return DEFAULT_MESSAGES_HREF;
     return `sms:${e164}&body=${DEFAULT_BODY}`;
   }
-  return fallback;
+  return DEFAULT_MESSAGES_HREF;
 }
 
 /**
