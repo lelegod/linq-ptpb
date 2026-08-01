@@ -225,15 +225,28 @@ const bookTrip: ToolFn = async (args, ctx) => {
   }
 
   const sessionId = await ctx.deps.db.createSession(trip.id, ctx.chatId);
-  const copy = cardCopy(chosen);
-  const url = `${ctx.deps.publicAppUrl.replace(/\/$/, '')}/map/${sessionId}?s=${sessionId}`;
+  const copy = { ...cardCopy(chosen), button: 'Buy on DSB' };
 
+  // The card links STRAIGHT to DSB. No map page — one hop from tap to ticket,
+  // and nothing in between that can be misconfigured or unreachable.
   try {
-    await ctx.deps.linq.sendMapCard(ctx.phone, { sessionId, url, ...copy });
+    await ctx.deps.linq.sendMapCard(ctx.phone, { sessionId, url: deepLink, ...copy });
   } catch (err) {
     console.error('[B][tool] book_trip card send failed, falling back to plain link', err);
     await ctx.deps.linq.sendChatText(ctx.chatId, `locked in — ${copy.title.toLowerCase()}, ${copy.subtitle.toLowerCase()}.\ntickets: ${deepLink}`);
     return { ok: true, card_sent: false, reply_already_sent: true, trip_id: trip.id };
+  }
+
+  // Without the map page there's no beacon, so nothing else would ever confirm
+  // the booking. Send it here instead.
+  try {
+    await ctx.deps.linq.sendChatText(
+      ctx.chatId,
+      `\u{1F686} locked in! i'll remind you ${REMINDER_MINUTES_DEFAULT} min before departure.`,
+      { effect: 'confetti' },
+    );
+  } catch (err) {
+    console.error('[B][tool] confirmation text failed', err);
   }
 
   console.log(`[B][tool] book_trip ${ctx.userId} trip=${trip.id} session=${sessionId} vendor=${ticketVendor(chosen)}`);
