@@ -22,6 +22,7 @@ export function LoginClient() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
 
   const refreshSession = useCallback(async () => {
     const sb = getSupabaseBrowser();
@@ -43,6 +44,26 @@ export function LoginClient() {
 
     let cancelled = false;
     (async () => {
+      try {
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (url && key) {
+          const res = await fetch(`${url}/auth/v1/settings`, {
+            headers: { apikey: key, Authorization: `Bearer ${key}` },
+          });
+          if (res.ok) {
+            const settings = (await res.json()) as {
+              external?: { google?: boolean };
+            };
+            if (!cancelled) {
+              setGoogleEnabled(Boolean(settings.external?.google));
+            }
+          }
+        }
+      } catch {
+        /* Google stays hidden */
+      }
+
       // Fallback: older flows may land here with ?code= (primary exchange is /auth/callback).
       const code = params.get("code");
       if (code) {
@@ -109,7 +130,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
     });
     setBusy(false);
     if (err) {
-      setError(err.message);
+      const msg = err.message.toLowerCase();
+      if (msg.includes("rate limit")) {
+        setError(
+          "Too many emails sent recently. Wait a few minutes, then try again — or use Email & password.",
+        );
+      } else {
+        setError(err.message);
+      }
       return;
     }
     setStatus("Check your email for a magic link.");
@@ -134,13 +162,35 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
       router.refresh();
       return;
     }
-    const { error: signUpErr } = await sb.auth.signUp({ email, password });
+    const { data: signUpData, error: signUpErr } = await sb.auth.signUp({
+      email,
+      password,
+    });
     setBusy(false);
     if (signUpErr) {
-      setError(signInErr.message || signUpErr.message);
+      const combined = `${signInErr.message} ${signUpErr.message}`.toLowerCase();
+      if (combined.includes("rate limit")) {
+        setError(
+          "Too many emails sent recently (confirmation mail). Wait a few minutes and try again.",
+        );
+      } else if (
+        signInErr.message.toLowerCase().includes("invalid login") ||
+        signInErr.message.toLowerCase().includes("invalid credentials")
+      ) {
+        setError(signUpErr.message || signInErr.message);
+      } else {
+        setError(signInErr.message || signUpErr.message);
+      }
       return;
     }
-    setStatus("Account created — check email if confirmation is required.");
+    if (signUpData.session) {
+      setStatus("Account created — signed in.");
+      await refreshSession();
+      router.replace(nextPath());
+      router.refresh();
+      return;
+    }
+    setStatus("Account created — check your email to confirm, then sign in.");
     await refreshSession();
   }
 
@@ -194,35 +244,39 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
             ))}
           </div>
 
-          <button
-            type="button"
-            disabled={busy}
-            onClick={async () => {
-              setBusy(true);
-              setError(null);
-              const sb = getSupabaseBrowser();
-              if (!sb) {
-                setBusy(false);
-                return;
-              }
-              const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
-              const { error: err } = await sb.auth.signInWithOAuth({
-                provider: "google",
-                options: { redirectTo },
-              });
-              if (err) {
-                setBusy(false);
-                setError(err.message);
-              }
-            }}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--paper)] py-3 text-[14px] font-semibold disabled:opacity-60"
-          >
-            Continue with Google
-          </button>
+          {googleEnabled && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                setError(null);
+                const sb = getSupabaseBrowser();
+                if (!sb) {
+                  setBusy(false);
+                  return;
+                }
+                const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
+                const { error: err } = await sb.auth.signInWithOAuth({
+                  provider: "google",
+                  options: { redirectTo },
+                });
+                if (err) {
+                  setBusy(false);
+                  setError(err.message);
+                }
+              }}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--paper)] py-3 text-[14px] font-semibold disabled:opacity-60"
+            >
+              Continue with Google
+            </button>
+          )}
 
-          <div className="my-4 flex items-center gap-3 text-[12px] text-[var(--muted)]">
+          <div
+            className={`${googleEnabled ? "my-4" : "mt-6"} flex items-center gap-3 text-[12px] text-[var(--muted)]`}
+          >
             <span className="h-px flex-1 bg-[var(--line)]" />
-            or email
+            {googleEnabled ? "or email" : "email"}
             <span className="h-px flex-1 bg-[var(--line)]" />
           </div>
 

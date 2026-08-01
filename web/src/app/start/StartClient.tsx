@@ -3,35 +3,52 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy } from "@/content/copy";
-import { savePendingName } from "@/lib/auth/name";
+import {
+  AGE_MAX,
+  AGE_MIN,
+  buildOnboardingMeta,
+  parseAge,
+  readPendingAge,
+  readPendingName,
+  savePendingAge,
+  savePendingName,
+} from "@/lib/auth/onboarding";
 import { getSupabaseBrowser, getSupabaseEnv } from "@/lib/supabase/client";
 
 const NAME_KEY = "rejsy_onboarding_name";
+const AGE_KEY = "rejsy_onboarding_age";
 
-type Step = "name" | "email";
+type Step = "name" | "age" | "email";
 
 export function StartClient() {
   const router = useRouter();
   const { configured } = getSupabaseEnv();
   const [step, setStep] = useState<Step>("name");
   const [name, setName] = useState("");
+  const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
 
-  const persistNameMeta = useCallback(async (fullName: string) => {
-    const sb = getSupabaseBrowser();
-    if (!sb || !fullName.trim()) return;
-    await sb.auth.updateUser({
-      data: { full_name: fullName.trim(), name: fullName.trim() },
-    });
-  }, []);
+  const persistOnboardingMeta = useCallback(
+    async (fullName: string, ageValue: number | null) => {
+      const sb = getSupabaseBrowser();
+      if (!sb) return;
+      const data = buildOnboardingMeta(fullName, ageValue);
+      if (!data.full_name && data.age == null) return;
+      await sb.auth.updateUser({ data });
+    },
+    [],
+  );
 
   useEffect(() => {
     try {
-      const saved = sessionStorage.getItem(NAME_KEY);
-      if (saved) setName(saved);
+      const savedName = sessionStorage.getItem(NAME_KEY);
+      if (savedName) setName(savedName);
+      const savedAge = sessionStorage.getItem(AGE_KEY);
+      if (savedAge) setAge(savedAge);
     } catch {
       /* ignore */
     }
@@ -39,6 +56,26 @@ export function StartClient() {
     if (!configured) return;
     const sb = getSupabaseBrowser();
     if (!sb) return;
+
+    void (async () => {
+      try {
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (url && key) {
+          const res = await fetch(`${url}/auth/v1/settings`, {
+            headers: { apikey: key, Authorization: `Bearer ${key}` },
+          });
+          if (res.ok) {
+            const settings = (await res.json()) as {
+              external?: { google?: boolean };
+            };
+            setGoogleEnabled(Boolean(settings.external?.google));
+          }
+        }
+      } catch {
+        /* ignore — Google button stays hidden */
+      }
+    })();
 
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
@@ -58,9 +95,12 @@ export function StartClient() {
           setError(exchangeErr.message);
           setStep("email");
         } else if (!cancelled) {
-          const stored =
-            sessionStorage.getItem(NAME_KEY) || name.trim() || "";
-          if (stored) await persistNameMeta(stored);
+          const storedName =
+            readPendingName() || name.trim() || "";
+          const storedAge = readPendingAge();
+          if (storedName || storedAge != null) {
+            await persistOnboardingMeta(storedName, storedAge);
+          }
           window.history.replaceState({}, "", "/start");
           router.replace("/dashboard");
           router.refresh();
@@ -69,8 +109,11 @@ export function StartClient() {
       }
       const { data } = await sb.auth.getSession();
       if (!cancelled && data.session) {
-        const stored = sessionStorage.getItem(NAME_KEY);
-        if (stored) await persistNameMeta(stored);
+        const storedName = readPendingName();
+        const storedAge = readPendingAge();
+        if (storedName || storedAge != null) {
+          await persistOnboardingMeta(storedName || "", storedAge);
+        }
         router.replace("/dashboard");
         router.refresh();
       }
@@ -79,7 +122,7 @@ export function StartClient() {
     return () => {
       cancelled = true;
     };
-  }, [configured, name, persistNameMeta, router]);
+  }, [configured, name, persistOnboardingMeta, router]);
 
   function onNameContinue(e: React.FormEvent) {
     e.preventDefault();
@@ -90,6 +133,19 @@ export function StartClient() {
     }
     setError(null);
     savePendingName(trimmed);
+    setStep("age");
+  }
+
+  function onAgeContinue(e: React.FormEvent) {
+    e.preventDefault();
+    const parsed = parseAge(age);
+    if (!parsed.ok) {
+      setError(parsed.error);
+      return;
+    }
+    setError(null);
+    savePendingAge(parsed.age);
+    setAge(String(parsed.age));
     setStep("email");
   }
 
@@ -103,17 +159,34 @@ export function StartClient() {
       setBusy(false);
       return;
     }
+    const parsedAge = parseAge(age);
+    const ageValue = readPendingAge() ?? (parsedAge.ok ? parsedAge.age : null);
+    if (ageValue == null) {
+      setBusy(false);
+      setError(`Please enter an age between ${AGE_MIN} and ${AGE_MAX}.`);
+      setStep("age");
+      return;
+    }
+    savePendingName(name.trim());
+    savePendingAge(ageValue);
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent("/dashboard")}`;
     const { error: err } = await sb.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: redirectTo,
-        data: { full_name: name.trim(), name: name.trim() },
+        data: buildOnboardingMeta(name, ageValue),
       },
     });
     setBusy(false);
     if (err) {
-      setError(err.message);
+      const msg = err.message.toLowerCase();
+      if (msg.includes("rate limit")) {
+        setError(
+          "Too many emails sent recently. Wait a few minutes, then try again — or use Log in with email & password if you already have an account.",
+        );
+      } else {
+        setError(err.message);
+      }
       return;
     }
     setStatus("Check your email for a magic link.");
@@ -127,7 +200,16 @@ export function StartClient() {
       setBusy(false);
       return;
     }
+    const parsedAge = parseAge(age);
+    const ageValue = readPendingAge() ?? (parsedAge.ok ? parsedAge.age : null);
+    if (!name.trim() || ageValue == null) {
+      setBusy(false);
+      setError("Please complete your name and age first.");
+      setStep(!name.trim() ? "name" : "age");
+      return;
+    }
     savePendingName(name.trim());
+    savePendingAge(ageValue);
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent("/dashboard")}`;
     const { error: err } = await sb.auth.signInWithOAuth({
       provider: "google",
@@ -138,6 +220,13 @@ export function StartClient() {
       setError(err.message);
     }
   }
+
+  const stepTitle =
+    step === "name"
+      ? copy.onboardingNamePrompt
+      : step === "age"
+        ? copy.onboardingAgePrompt
+        : copy.onboardingEmailTitle;
 
   return (
     <div className="relative mx-auto flex min-h-[calc(100svh-8rem)] max-w-md flex-col px-1 py-6 sm:py-10">
@@ -153,10 +242,14 @@ export function StartClient() {
             {copy.onboardingWelcome}
           </p>
           <h1 className="mt-1 font-display text-[28px] font-medium tracking-[-0.03em] text-[var(--slate)] sm:text-[32px]">
-            {step === "name"
-              ? copy.onboardingNamePrompt
-              : copy.onboardingEmailTitle}
+            {stepTitle}
           </h1>
+          {step === "age" && (
+            <p className="mt-2 text-[14px] leading-[1.55] text-[var(--muted)]">
+              Nice to meet you, {name.trim() || "there"}.{" "}
+              {copy.onboardingAgeSub}
+            </p>
+          )}
           {step === "email" && (
             <p className="mt-2 text-[14px] leading-[1.55] text-[var(--muted)]">
               Nice to meet you, {name.trim() || "there"}.{" "}
@@ -211,6 +304,47 @@ export function StartClient() {
               </button>
             </div>
           </form>
+        ) : step === "age" ? (
+          <form onSubmit={onAgeContinue} className="space-y-8">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              name="age"
+              autoComplete="bday-year"
+              autoFocus
+              required
+              placeholder="Your age"
+              value={age}
+              onChange={(e) => setAge(e.target.value.replace(/[^\d]/g, ""))}
+              className="w-full rounded-full border border-[var(--line)] bg-white px-6 py-4 text-[17px] text-[var(--ink)] outline-none transition-[border-color,box-shadow] placeholder:text-[var(--muted)] focus:border-[var(--red)]/40 focus:shadow-[0_0_0_3px_var(--red-soft)]"
+              aria-describedby="age-hint"
+            />
+            <p id="age-hint" className="text-[12px] text-[var(--muted)]">
+              Ages {AGE_MIN}–{AGE_MAX}. We use this to personalize your account.
+            </p>
+            {error && (
+              <p className="text-[13px] text-[var(--red)]" role="alert">
+                {error}
+              </p>
+            )}
+            <button
+              type="submit"
+              className="w-full rounded-full bg-[var(--red)] py-3.5 text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              {copy.onboardingContinue}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setStep("name");
+              }}
+              className="text-[13px] font-medium text-[var(--slate)] hover:text-[var(--ink)]"
+            >
+              ← Back
+            </button>
+          </form>
         ) : !configured ? (
           <div className="rounded-[16px] border border-dashed border-[var(--line)] bg-white p-6">
             <h2 className="text-[18px] font-semibold tracking-[-0.02em]">
@@ -226,8 +360,8 @@ export function StartClient() {
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
             </pre>
             <p className="mt-4 text-[13px] text-[var(--muted)]">
-              Hi {name.trim() || "there"} — your name is saved locally. Auth
-              unlocks once env vars are set. You can still{" "}
+              Hi {name.trim() || "there"} — your name and age are saved locally.
+              Auth unlocks once env vars are set. You can still{" "}
               <a href="/" className="underline underline-offset-2">
                 explore the site
               </a>{" "}
@@ -235,7 +369,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
             </p>
             <button
               type="button"
-              onClick={() => setStep("name")}
+              onClick={() => setStep("age")}
               className="mt-5 text-[13px] font-medium text-[var(--slate)] hover:text-[var(--ink)]"
             >
               ← Back
@@ -243,21 +377,25 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
           </div>
         ) : (
           <div className="space-y-5">
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => void onGoogle()}
-              className="flex w-full items-center justify-center gap-2.5 rounded-full border border-[var(--line)] bg-white py-3.5 text-[15px] font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--paper)] disabled:opacity-60"
-            >
-              <GoogleGlyph />
-              Continue with Google
-            </button>
+            {googleEnabled && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => void onGoogle()}
+                className="flex w-full items-center justify-center gap-2.5 rounded-full border border-[var(--line)] bg-white py-3.5 text-[15px] font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--paper)] disabled:opacity-60"
+              >
+                <GoogleGlyph />
+                Continue with Google
+              </button>
+            )}
 
-            <div className="flex items-center gap-3 text-[12px] text-[var(--muted)]">
-              <span className="h-px flex-1 bg-[var(--line)]" />
-              or email magic link
-              <span className="h-px flex-1 bg-[var(--line)]" />
-            </div>
+            {googleEnabled && (
+              <div className="flex items-center gap-3 text-[12px] text-[var(--muted)]">
+                <span className="h-px flex-1 bg-[var(--line)]" />
+                or email magic link
+                <span className="h-px flex-1 bg-[var(--line)]" />
+              </div>
+            )}
 
             <form onSubmit={onMagic} className="space-y-4">
               <input
@@ -290,11 +428,21 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
               </p>
             )}
 
+            <p className="text-[12px] text-[var(--muted)]">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="font-medium text-[var(--ink)] underline underline-offset-2"
+              >
+                Log in
+              </a>
+            </p>
+
             <button
               type="button"
               onClick={() => {
                 setError(null);
-                setStep("name");
+                setStep("age");
               }}
               className="text-[13px] font-medium text-[var(--slate)] hover:text-[var(--ink)]"
             >

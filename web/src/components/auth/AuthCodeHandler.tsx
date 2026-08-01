@@ -3,12 +3,14 @@
 import { useEffect, useRef } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import {
-  clearPendingName,
+  buildOnboardingMeta,
+  clearPendingOnboarding,
+  readPendingAge,
   readPendingName,
-} from "@/lib/auth/name";
+} from "@/lib/auth/onboarding";
 
 /**
- * Exchanges ?code= for a session and persists pending onboarding name
+ * Exchanges ?code= for a session and persists pending onboarding name/age
  * into user_metadata when present.
  */
 export function AuthCodeHandler({
@@ -40,14 +42,15 @@ export function AuthCodeHandler({
         window.history.replaceState({}, "", clean.pathname + clean.search);
       }
 
-      const pending = readPendingName();
-      if (pending) {
+      const pendingName = readPendingName();
+      const pendingAge = readPendingAge();
+      if (pendingName || pendingAge != null) {
         const { data } = await sb.auth.getUser();
         if (data.user) {
           await sb.auth.updateUser({
-            data: { full_name: pending, name: pending },
+            data: buildOnboardingMeta(pendingName || "", pendingAge),
           });
-          clearPendingName();
+          clearPendingOnboarding();
         }
       }
 

@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { AuthCodeHandler } from "@/components/auth/AuthCodeHandler";
+import { readPendingName } from "@/lib/auth/onboarding";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 export function DashboardClient({ messagesHref }: { messagesHref: string }) {
@@ -12,12 +13,8 @@ export function DashboardClient({ messagesHref }: { messagesHref: string }) {
     setEmail(sessionEmail);
     const sb = getSupabaseBrowser();
     if (!sb) {
-      try {
-        const n = sessionStorage.getItem("rejsy_onboarding_name");
-        if (n) setGreeting(n);
-      } catch {
-        /* ignore */
-      }
+      const n = readPendingName();
+      if (n) setGreeting(n);
       return;
     }
     const { data } = await sb.auth.getSession();
@@ -33,12 +30,8 @@ export function DashboardClient({ messagesHref }: { messagesHref: string }) {
         return;
       }
     }
-    try {
-      const n = sessionStorage.getItem("rejsy_onboarding_name");
-      if (n) setGreeting(n);
-    } catch {
-      /* ignore */
-    }
+    const n = readPendingName();
+    if (n) setGreeting(n);
   }, []);
 
   return (

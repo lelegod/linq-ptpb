@@ -53,13 +53,15 @@ export const copy = {
   loginSub: "Save trips and connect integrations when they ship.",
   onboardingWelcome: "Welcome to Rejsy",
   onboardingNamePrompt: "What's your name?",
+  onboardingAgePrompt: "How old are you?",
+  onboardingAgeSub: "A quick detail so we can set up your account.",
   onboardingContinue: "Continue",
   onboardingLater: "Set up later",
   onboardingTerms:
     "By continuing, you agree to our Terms of Service and Privacy Policy.",
   onboardingEmailTitle: "How should we reach you?",
   onboardingEmailSub:
-    "Connect Gmail or get a magic link — we'll save your name to your account.",
+    "Get a magic link — we'll save your name and age to your account.",
 } as const;
 
 export const productMenu = [

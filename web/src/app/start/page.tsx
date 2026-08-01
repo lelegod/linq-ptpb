@@ -4,7 +4,7 @@ import { StartClient } from "@/app/start/StartClient";
 export const metadata: Metadata = {
   title: "Get Started",
   description:
-    "Welcome to Rejsy — tell us your name, then connect with Google or email to start planning Denmark transit in Messages.",
+    "Welcome to Rejsy — tell us your name and age, then connect with email to start planning Denmark transit in Messages.",
 };
 
 export default function StartPage() {
