@@ -71,12 +71,12 @@ function IconDatabase() {
 
 export function Bento() {
   return (
-    <section className="bg-[var(--ink)] px-6 py-16 md:px-10 md:py-20">
+    <section className="bg-[var(--ink)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto max-w-5xl">
         <p className="font-data text-[11px] uppercase tracking-[0.06em] text-[var(--slate-inv)]">
           {copy.bentoLabel}
         </p>
-        <h2 className="mt-3 text-[24px] font-semibold tracking-[-0.03em] text-white">
+        <h2 className="mt-3 text-[22px] font-semibold tracking-[-0.03em] text-white sm:text-[24px]">
           {copy.bentoHeading}
         </h2>
 
@@ -113,7 +113,7 @@ export function Bento() {
                 <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
                   It texts you first.
                 </h3>
-                <p className="mt-2 text-[14px] leading-[1.55] text-[#FFD3D9]">
+                <p className="mt-2 text-[14px] leading-[1.55] text-[var(--red-soft)]">
                   25 minutes before departure, with your platform. You didn&apos;t
                   ask.
                 </p>
@@ -160,7 +160,7 @@ export function Bento() {
           </div>
         </div>
 
-        <p className="mt-5 font-data text-[11px] text-[#4A4A4E]">
+        <p className="mt-5 font-data text-[11px] text-[var(--fig)]">
           {copy.bentoCaption}
         </p>
       </div>

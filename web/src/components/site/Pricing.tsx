@@ -18,14 +18,14 @@ const plusFeatures = [
 
 export function Pricing({ messagesHref }: { messagesHref: string }) {
   return (
-    <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">
+    <section id="pricing" className="bg-[var(--paper)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto max-w-4xl">
-        <p className="max-w-xl text-[16px] leading-[1.65] text-[var(--slate)]">
+        <p className="max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:text-[16px] sm:leading-[1.65]">
           {copy.pricingEyebrow}
         </p>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          <div className="rounded-[12px] border border-[var(--line)] p-6">
+        <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-2">
+          <div className="rounded-[12px] border border-[var(--line)] p-5 sm:p-6">
             <h3 className="text-[20px] font-semibold tracking-[-0.03em]">Free</h3>
             <p className="mt-1 font-data text-[13px] text-[var(--muted)]">
               0 kr
@@ -43,7 +43,7 @@ export function Pricing({ messagesHref }: { messagesHref: string }) {
             </a>
           </div>
 
-          <div className="relative rounded-[12px] border border-[var(--red)] p-6">
+          <div className="relative rounded-[12px] border border-[var(--red)] p-5 sm:p-6">
             <span className="absolute -top-2.5 right-4 rounded bg-[var(--red)] px-2 py-0.5 font-data text-[10px] uppercase tracking-[0.06em] text-white">
               Most popular
             </span>

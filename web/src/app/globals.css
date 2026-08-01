@@ -10,14 +10,24 @@
   --card-dark: #17171a;
   --slate-inv: #8a8a90;
   --bubble: #007aff;
+  --inbound: #e9e9eb;
+  --dot: #8e8e93;
   --ontime: #1b8a4b;
   --delayed: #e07b00;
+  --red-soft: #ffd3d9;
+  --fig: #4a4a4e;
+}
+
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-data {
@@ -82,7 +92,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #8e8e93;
+  background: var(--dot);
   animation: blink 1.05s infinite;
 }
 

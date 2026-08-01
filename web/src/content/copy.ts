@@ -3,8 +3,9 @@ export const copy = {
   headline: ["The friend who knows", "every train in Denmark"] as const,
   subhead:
     "Text it where you're going. It plans, hands you the ticket, and tells you when to walk out the door.",
-  cta: "Text Rejsy in Messages",
-  ctaNote: "3 free trips · no card required · iPhone only",
+  cta: "Text Rejsy",
+  ctaLong: "Text Rejsy in Messages",
+  ctaNote: "3 free trips · no card · opens Messages",
   qrHint: "scan to open Messages",
   navPricing: "Pricing",
   navGetStarted: "Text Rejsy",

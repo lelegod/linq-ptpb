@@ -2,7 +2,7 @@ import { copy } from "@/content/copy";
 
 export function Nav({ messagesHref }: { messagesHref: string }) {
   return (
-    <nav className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-5 py-3 md:px-8">
+    <nav className="flex items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-4 py-3 sm:px-5 md:px-8">
       <a href="/" className="flex items-center gap-2.5">
         <span className="flex items-end gap-[3px]" aria-hidden>
           <span className="h-3 w-1 bg-[var(--red)] opacity-100" />
@@ -13,7 +13,7 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           rejsy
         </span>
       </a>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <a
           href="#pricing"
           className="text-[12px] text-[var(--slate)] hover:text-[var(--ink)]"
@@ -22,7 +22,7 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
         </a>
         <a
           href={messagesHref}
-          className="rounded-[10px] bg-[var(--red)] px-3 py-1.5 text-[12px] font-semibold text-white"
+          className="rounded-[10px] bg-[var(--red)] px-3 py-2 text-[12px] font-semibold text-white active:opacity-90"
         >
           {copy.navGetStarted}
         </a>
