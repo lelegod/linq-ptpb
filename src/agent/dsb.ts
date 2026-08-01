@@ -7,10 +7,13 @@
 
 import type { TripOption } from './types';
 
-const MODE = (process.env.DSB_DEEPLINK_MODE ?? 'prefill') as 'prefill' | 'plain';
+// Default is 'plain'. VERIFIED 2026-08-01: dsb.dk's own homepage IS the journey
+// search, and no documented query-param prefill exists — the old
+// /find-produkter-og-priser/ path from Architecture.md §2.4 returns 404.
+const MODE = (process.env.DSB_DEEPLINK_MODE ?? 'plain') as 'prefill' | 'plain';
 
-const DSB_HOME = 'https://www.dsb.dk/find-produkter-og-priser/';
-const DOT_HOME = 'https://dinoffentligetransport.dk/billetter/';
+const DSB_HOME = 'https://www.dsb.dk/';
+const DOT_HOME = 'https://dinoffentligetransport.dk/';
 
 /** Greater-Copenhagen station ids — short hops here are DOT zone tickets, not DSB. */
 const CPH_AREA = new Set([
