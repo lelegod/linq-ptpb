@@ -36,7 +36,6 @@ export function LoginClient() {
     if (!sb) return;
 
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
     const err = params.get("error");
     if (err && err !== "auth_config") {
       setError(decodeURIComponent(err));
@@ -44,6 +43,8 @@ export function LoginClient() {
 
     let cancelled = false;
     (async () => {
+      // Fallback: older flows may land here with ?code= (primary exchange is /auth/callback).
+      const code = params.get("code");
       if (code) {
         const { error: exchangeErr } =
           await sb.auth.exchangeCodeForSession(code);
@@ -51,6 +52,7 @@ export function LoginClient() {
         else if (!cancelled) {
           window.history.replaceState({}, "", "/login");
           router.replace(nextPath());
+          router.refresh();
           return;
         }
         window.history.replaceState({}, "", "/login");
@@ -129,6 +131,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
       setStatus("Signed in.");
       await refreshSession();
       router.replace(nextPath());
+      router.refresh();
       return;
     }
     const { error: signUpErr } = await sb.auth.signUp({ email, password });

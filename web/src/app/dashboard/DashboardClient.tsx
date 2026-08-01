@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getSupabaseBrowser, getSupabaseEnv } from "@/lib/supabase/client";
+import { useCallback, useState } from "react";
+import { AuthCodeHandler } from "@/components/auth/AuthCodeHandler";
+import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 export function DashboardClient({ messagesHref }: { messagesHref: string }) {
-  const { configured } = getSupabaseEnv();
   const [greeting, setGreeting] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!configured) {
+  const onAuthReady = useCallback(async (sessionEmail: string | null) => {
+    setEmail(sessionEmail);
+    const sb = getSupabaseBrowser();
+    if (!sb) {
       try {
         const n = sessionStorage.getItem("rejsy_onboarding_name");
         if (n) setGreeting(n);
@@ -18,49 +20,30 @@ export function DashboardClient({ messagesHref }: { messagesHref: string }) {
       }
       return;
     }
-    const sb = getSupabaseBrowser();
-    if (!sb) return;
-
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-
-    (async () => {
-      if (code) {
-        await sb.auth.exchangeCodeForSession(code);
-        window.history.replaceState({}, "", "/dashboard");
-        try {
-          const stored = sessionStorage.getItem("rejsy_onboarding_name");
-          if (stored) {
-            await sb.auth.updateUser({
-              data: { full_name: stored, name: stored },
-            });
-          }
-        } catch {
-          /* ignore */
-        }
+    const { data } = await sb.auth.getSession();
+    const user = data.session?.user;
+    if (user) {
+      const meta = user.user_metadata as {
+        full_name?: string;
+        name?: string;
+      };
+      const fromMeta = meta.full_name || meta.name || null;
+      if (fromMeta) {
+        setGreeting(fromMeta);
+        return;
       }
-      const { data } = await sb.auth.getSession();
-      const user = data.session?.user;
-      if (user) {
-        setEmail(user.email ?? null);
-        const meta = user.user_metadata as {
-          full_name?: string;
-          name?: string;
-        };
-        setGreeting(meta.full_name || meta.name || null);
-      } else {
-        try {
-          const n = sessionStorage.getItem("rejsy_onboarding_name");
-          if (n) setGreeting(n);
-        } catch {
-          /* ignore */
-        }
-      }
-    })();
-  }, [configured]);
+    }
+    try {
+      const n = sessionStorage.getItem("rejsy_onboarding_name");
+      if (n) setGreeting(n);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   return (
     <div className="space-y-8">
+      <AuthCodeHandler onReady={onAuthReady} />
       <header>
         <p className="font-data text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]">
           Dashboard
