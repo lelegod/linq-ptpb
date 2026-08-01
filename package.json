@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx scripts/smoke-agent.ts"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,8 @@
   "private": true,
   "dependencies": {
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "groq-sdk": "^0.9.0",
+    "hafas-client": "^6.3.4"
   }
 }
