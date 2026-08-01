@@ -2,6 +2,8 @@
 // Actions go to handles (POST /v3/messages), text goes to chats (POST /v3/chats/{id}/messages).
 // Mixing them up returns error 1005 — so does a chatId that isn't a UUID.
 
+import { splitIntoBubbles } from './bubbles';
+
 const LINQ_API_BASE = 'https://api.linqapp.com/api/partner/v3';
 
 function linqHeaders(): Record<string, string> {
@@ -17,12 +19,21 @@ async function assertOk(res: Response, label: string): Promise<void> {
   }
 }
 
-/** Plain-text reply into an existing chat. Verified against a live chat. */
-export async function sendChatText(
+/** Back-to-back sends can land out of order in the thread. */
+const bubbleGapMs = () => Number(process.env.BUBBLE_GAP_MS ?? 700);
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * One POST, one bubble. Returns Linq's id for the created message so we can
+ * tell which bubble a tapback landed on — Linq's exact response shape isn't
+ * documented, so dig through the likely spots and return null rather than
+ * failing the send.
+ */
+async function postOneBubble(
   chatId: string,
   text: string,
   opts?: { effect?: string }
-): Promise<void> {
+): Promise<string | null> {
   const res = await fetch(`${LINQ_API_BASE}/chats/${chatId}/messages`, {
     method: 'POST',
     headers: linqHeaders(),
@@ -34,6 +45,44 @@ export async function sendChatText(
     }),
   });
   await assertOk(res, 'sendChatText');
+
+  try {
+    const body: any = await res.json();
+    const id = body?.data?.id ?? body?.id ?? body?.message?.id ?? body?.data?.message?.id;
+    return id ? String(id) : null;
+  } catch {
+    return null; // send succeeded; we just can't track this one for tapbacks
+  }
+}
+
+/**
+ * Plain-text reply into an existing chat, split into bubbles.
+ *
+ * The split lives HERE, not in sendMessage(), because the tool layer and the
+ * cron reminders call this directly and bypass sendMessage entirely —
+ * book_trip returns an empty reply, so its confirmation never passes through
+ * handleTurn. Splitting at the single choke point is what makes every path
+ * behave the same.
+ */
+export async function sendChatText(
+  chatId: string,
+  text: string,
+  opts?: { effect?: string }
+): Promise<Array<string | null>> {
+  const bubbles = splitIntoBubbles(text);
+  if (bubbles.length === 0) return [];
+
+  const ids: Array<string | null> = [];
+  for (let i = 0; i < bubbles.length; i++) {
+    // The effect rides the final bubble — confetti should land on the payoff,
+    // not on the setup line.
+    const isLast = i === bubbles.length - 1;
+    ids.push(
+      await postOneBubble(chatId, bubbles[i], isLast && opts?.effect ? { effect: opts.effect } : undefined),
+    );
+    if (!isLast) await sleep(bubbleGapMs());
+  }
+  return ids;
 }
 
 /**

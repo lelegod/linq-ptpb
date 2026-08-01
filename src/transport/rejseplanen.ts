@@ -17,6 +17,27 @@ const TIMEOUT_MS = Number(process.env.TRANSPORT_TIMEOUT_MS ?? 9000);
 let clientPromise: Promise<any> | null = null;
 let hafasDead = false;
 
+/**
+ * hafas-client 6.3.6's Rejseplanen profile only declares five products —
+ * national-train(1), national-train-2(2), local-train(4), o(8), s-tog(16).
+ * Bus and metro are missing entirely, so the router could not use them: a
+ * Bella Center → DTU query answered with a 16-minute WALK to Ørestad rather
+ * than two minutes on the M1, and no bus ever appeared in any result.
+ *
+ * These bitmasks were verified empirically against the live API on 2026-08-01
+ * (Kongens Nytorv → Christianshavn returns Metro M1/M2; Bella Center → DTU
+ * returns Metro M1 + Bus 150S). Do not guess at new ones — test them the same
+ * way, because a wrong mask silently changes which journeys come back.
+ */
+const EXTRA_PRODUCTS = [
+  { id: 'bus', mode: 'bus', bitmasks: [32], name: 'Bus', short: 'Bus', default: true },
+  { id: 'express-bus', mode: 'bus', bitmasks: [64], name: 'Expressbus', short: 'X', default: true },
+  { id: 'night-bus', mode: 'bus', bitmasks: [128], name: 'Natbus', short: 'N', default: true },
+  { id: 'telebus', mode: 'bus', bitmasks: [256], name: 'Telebus', short: 'T', default: true },
+  { id: 'ferry', mode: 'watercraft', bitmasks: [512], name: 'Færge', short: 'F', default: true },
+  { id: 'metro', mode: 'train', bitmasks: [1024], name: 'Metro', short: 'M', default: true },
+];
+
 async function getClient(): Promise<any> {
   if (!clientPromise) {
     clientPromise = (async () => {
@@ -24,7 +45,11 @@ async function getClient(): Promise<any> {
       // from ever loading it.
       const { createClient } = await import('hafas-client');
       const { profile } = await import('hafas-client/p/rejseplanen/index.js');
-      return createClient(profile as any, 'ptpb-rejsy-hackathon');
+      const extended = {
+        ...(profile as any),
+        products: [...(profile as any).products, ...EXTRA_PRODUCTS],
+      };
+      return createClient(extended as any, 'ptpb-rejsy-hackathon');
     })();
   }
   return clientPromise;
@@ -61,12 +86,31 @@ function toStationRef(loc: any): StationRef | null {
   return { id, name, lat: l.latitude, lon: l.longitude };
 }
 
+/**
+ * Product ids seen live: national-train, national-train-2, local-train, o,
+ * s-tog, bus, express-bus, night-bus, telebus, ferry, metro.
+ *
+ * The old version read `product ?? mode`, which was the bug behind "• Lokalbane
+ * 910": that service is product 'o' with mode 'train', and `??` meant the
+ * useless 'o' always won and the accurate 'train' was never consulted. Product
+ * decides only where it's specific (metro, bus); otherwise mode does.
+ */
 function mapMode(leg: any): LegMode {
   if (leg.walking) return 'walk';
-  const p = String(leg.line?.product ?? leg.line?.mode ?? '').toLowerCase();
-  if (p.includes('metro')) return 'metro';
-  if (p.includes('bus')) return 'bus';
-  if (p.includes('train') || p.includes('rail') || p.includes('ic') || p.includes('re')) return 'train';
+
+  const product = String(leg.line?.product ?? '').toLowerCase();
+  const mode = String(leg.line?.mode ?? '').toLowerCase();
+  const name = String(leg.line?.name ?? '').trim();
+
+  if (product.includes('metro') || /^metro\b/i.test(name) || /^m\d/i.test(name)) return 'metro';
+  if (product.includes('bus') || mode === 'bus') return 'bus';
+  if (mode === 'watercraft' || product.includes('ferry')) return 'other';
+
+  // s-tog, national-train, national-train-2, local-train — and 'o', which only
+  // identifies itself through mode.
+  if (product.includes('train') || product.includes('tog') || mode === 'train') return 'train';
+  if (/^[a-fh]$/i.test(name)) return 'train'; // bare S-tog letter, product missing
+
   return 'other';
 }
 

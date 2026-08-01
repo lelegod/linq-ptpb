@@ -20,7 +20,12 @@ export function getDeps(): Deps {
   cached = {
     db: memoryDb,
     linq: {
-      sendChatText: (chatId, text, opts) => sendChatText(chatId, text, opts),
+      // sendChatText now returns the per-bubble message ids (for tapbacks);
+      // the port contract is void, so swallow them here. Callers that need the
+      // ids — sendMessage.ts — import linq.ts directly.
+      sendChatText: async (chatId, text, opts) => {
+        await sendChatText(chatId, text, opts);
+      },
       // A's sendMapCard builds the URL from PUBLIC_APP_URL itself, so we drop
       // the one the tool computed and pass the parts it wants.
       sendMapCard: (toPhone, card) =>

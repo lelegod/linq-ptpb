@@ -13,7 +13,10 @@ const MAX_ITERATIONS = 4;
 // Memory.md §8 allows 20. Groq's free tier allows 12k tokens/MINUTE across all
 // calls, and system prompt + tool schemas is already ~2k of that — so we ship 8.
 // Raise it if you move to a paid tier.
-const HISTORY_TURNS = Number(process.env.HISTORY_TURNS ?? 8);
+// Message ROWS, not exchanges — each round trip costs two. 8 gave the agent
+// only four exchanges of memory, which is short for "plan, pick, ask about it,
+// change your mind". 16 is eight exchanges and still cheap on a 70B model.
+const HISTORY_TURNS = Number(process.env.HISTORY_TURNS ?? 16);
 
 let defaultDeps: Deps | null = null;
 
@@ -149,7 +152,18 @@ export async function handleTurnDetailed(
     reply = "tell me where you're headed and roughly when — i'll take it from there.";
   }
 
-  if (reply) await deps.db.logMessage(user.id, 'out', reply, allToolCalls);
+  // A tool that answered for us (book_trip sends its own confirmation and
+  // returns an empty reply) still has to leave a trace, or the next turn has no
+  // idea it happened — that's why "Route" right after a booking made the model
+  // call book_trip a second time, and only the `already` guard in tools.ts
+  // stopped a duplicate trip. Record what the tools did when there's no text.
+  const transcriptEntry =
+    reply ||
+    (allToolCalls.length
+      ? `(handled by ${allToolCalls.map((t) => t.name).join(', ')} — reply already sent to the user)`
+      : '');
+
+  if (transcriptEntry) await deps.db.logMessage(user.id, 'out', transcriptEntry, allToolCalls);
 
   console.log(
     `[B][agent] turn done in ${Date.now() - started}ms · tools=${allToolCalls.map((t) => t.name).join(',') || 'none'} · replyLen=${reply.length}`,

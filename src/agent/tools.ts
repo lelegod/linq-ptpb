@@ -18,6 +18,13 @@ import { renderOptions, cardCopy, renderReminder, renderStatus, renderTripList, 
 
 const lastPlan = new Map<string, { options: TripOption[]; at: number }>();
 
+// Opens the Digital Rejsekort app. VERIFIED 2026-08-01 in
+// https://app.rejsekort.dk/.well-known/apple-app-site-association:
+// appID 9VZ462LC8G.dk.rejsekort.digitalrejsekort claims components [{"/": "*"}]
+// — a wildcard, so every path on this host hands off to the app. Without the
+// app installed it 302s to www.rejsekort.dk, so the fallback is a real page.
+const REJSEKORT_APP_LINK = 'https://app.rejsekort.dk/';
+
 export function rememberPlan(userId: string, options: TripOption[]) {
   lastPlan.set(userId, { options, at: Date.now() });
 }
@@ -221,28 +228,30 @@ const bookTrip: ToolFn = async (args, ctx) => {
   }
 
   if (!ctx.chatId) {
-    return { ok: false, error: 'no chat id on file for this user — cannot send the route card' };
+    return { ok: false, error: 'no chat id on file for this user — cannot send the ticket link' };
   }
 
-  const sessionId = await ctx.deps.db.createSession(trip.id, ctx.chatId);
+  // Rejsekort, not a ticket link. DSB's checkout is session-bound, so no URL
+  // can express "this journey" (see dsb.ts) — but Rejsekort needs no purchase
+  // at all: the user taps in at the reader. Nothing to buy, nothing to prefill,
+  // and the claim is true. deep_link_url above still holds the DSB fallback for
+  // anyone without a card.
   const copy = cardCopy(chosen);
-  const url = `${ctx.deps.publicAppUrl.replace(/\/$/, '')}/map/${sessionId}?s=${sessionId}`;
+  await ctx.deps.linq.sendChatText(
+    ctx.chatId,
+    // Blank lines = separate bubbles (bubbles.ts). The link gets a bubble of
+    // its own with no other text, which is what makes iMessage render it as a
+    // rich preview card instead of an inline blue link.
+    `✅ Locked in\n${copy.title}\n${copy.subtitle}\n\nTap in with your Rejsekort — nothing to buy.\n\n${REJSEKORT_APP_LINK}`,
+  );
 
-  try {
-    await ctx.deps.linq.sendMapCard(ctx.phone, { sessionId, url, ...copy });
-  } catch (err) {
-    console.error('[B][tool] book_trip card send failed, falling back to plain link', err);
-    await ctx.deps.linq.sendChatText(ctx.chatId, `locked in — ${copy.title.toLowerCase()}, ${copy.subtitle.toLowerCase()}.\ntickets: ${deepLink}`);
-    return { ok: true, card_sent: false, reply_already_sent: true, trip_id: trip.id };
-  }
-
-  console.log(`[B][tool] book_trip ${ctx.userId} trip=${trip.id} session=${sessionId} vendor=${ticketVendor(chosen)}`);
+  console.log(`[B][tool] book_trip ${ctx.userId} trip=${trip.id} vendor=${ticketVendor(chosen)}`);
   return {
     ok: true,
-    card_sent: true,
+    card_sent: false,
     reply_already_sent: true,
     trip_id: trip.id,
-    instruction: 'The route card has been delivered. Reply with an empty message — send no text.',
+    instruction: 'The ticket link has been delivered. Reply with an empty message — send no text.',
   };
 };
 

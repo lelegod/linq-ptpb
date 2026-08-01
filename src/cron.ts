@@ -24,7 +24,7 @@ let running = false;
 /** Design.md §2.2 "Delay warning push". */
 function renderDelay(destination: string, plannedIso: string, delayMinutes: number): string {
   const newTime = new Date(new Date(plannedIso).getTime() + delayMinutes * 60_000).toISOString();
-  return `⚠️ heads up — your ${time(plannedIso)} to ${destination.toLowerCase()} is running ${delayMinutes} min late. new departure: ${time(newTime)}.`;
+  return `⚠️ Heads up\nYour ${time(plannedIso)} to ${destination} is running ${delayMinutes} min late.\nNew departure: ${time(newTime)}.`;
 }
 
 /** Exported so an admin route can fire it by hand if the timer misbehaves. */

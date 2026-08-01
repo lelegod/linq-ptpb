@@ -15,6 +15,18 @@ const MODE = (process.env.DSB_DEEPLINK_MODE ?? 'plain') as 'prefill' | 'plain';
 const DSB_HOME = 'https://www.dsb.dk/';
 const DOT_HOME = 'https://dinoffentligetransport.dk/';
 
+// AASA-registered path — iOS hands this to the DSB app instead of Safari.
+// VERIFIED 2026-08-01 in https://www.dsb.dk/.well-known/apple-app-site-association:
+// appID EVL9YWFL59.dk.dsb.nda claims /netbutik/rejseplan-side and /netbutik/rejseplan-side/*.
+// Bare https://www.dsb.dk/ is NOT claimed, which is why it always opened Safari.
+// In a browser this 302s to the dsb.dk homepage, so the no-app fallback is
+// identical to what we shipped before — this swap has no downside.
+// Query params are undocumented; we send none and make no prefill claim.
+const DSB_APP_LINK = 'https://www.dsb.dk/netbutik/rejseplan-side';
+
+// DOT has no equivalent: dinoffentligetransport.dk's AASA claims only
+// /scanandtravel/*, so Copenhagen zone trips stay a plain web hand-off.
+
 /** Greater-Copenhagen station ids — short hops here are DOT zone tickets, not DSB. */
 const CPH_AREA = new Set([
   '8600626', // København H
@@ -36,7 +48,7 @@ function isCopenhagenLocal(o: TripOption): boolean {
 }
 
 export function buildTicketLink(o: TripOption): string {
-  if (MODE === 'plain') return isCopenhagenLocal(o) ? DOT_HOME : DSB_HOME;
+  if (MODE === 'plain') return isCopenhagenLocal(o) ? DOT_HOME : DSB_APP_LINK;
 
   if (isCopenhagenLocal(o)) {
     // DOT has no documented query API — hand over the zone-ticket page.
