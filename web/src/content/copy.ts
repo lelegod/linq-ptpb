@@ -22,7 +22,7 @@ export const copy = {
   navPricing: "Pricing",
   navGetStarted: "Join waitlist",
   productLabel: "Product",
-  productHeading: "One agent that handles the trip for you",
+  productHeading: "Your agent that plans the trip",
   productSub:
     "Four texts. One trip. Integrations for DSB and more are coming.",
   howItWorksHero:
