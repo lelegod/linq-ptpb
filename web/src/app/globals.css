@@ -169,6 +169,19 @@ video {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Hero watermark: slow horizontal pass (EMU glide) */
+@keyframes trainGlide {
+  0% {
+    transform: translate3d(-6%, 0, 0);
+  }
+  100% {
+    transform: translate3d(6%, 0, 0);
+  }
+}
+.train-glide {
+  animation: trainGlide 36s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+
 @keyframes trackPulse {
   from {
     stroke-dashoffset: 24;
@@ -263,6 +276,7 @@ video {
   .fadeUp,
   .phoneIn,
   .train-exit,
+  .train-glide,
   .page-enter {
     animation: none;
     opacity: 1;
