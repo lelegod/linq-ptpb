@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy } from "@/content/copy";
+import { savePendingName } from "@/lib/auth/name";
 import { getSupabaseBrowser, getSupabaseEnv } from "@/lib/supabase/client";
 
 const NAME_KEY = "rejsy_onboarding_name";
@@ -49,6 +50,7 @@ export function StartClient() {
 
     let cancelled = false;
     (async () => {
+      // Fallback if a code lands here; primary exchange is /auth/callback.
       if (code) {
         const { error: exchangeErr } =
           await sb.auth.exchangeCodeForSession(code);
@@ -61,6 +63,7 @@ export function StartClient() {
           if (stored) await persistNameMeta(stored);
           window.history.replaceState({}, "", "/start");
           router.replace("/dashboard");
+          router.refresh();
           return;
         }
       }
@@ -69,6 +72,7 @@ export function StartClient() {
         const stored = sessionStorage.getItem(NAME_KEY);
         if (stored) await persistNameMeta(stored);
         router.replace("/dashboard");
+        router.refresh();
       }
     })();
 
@@ -85,11 +89,7 @@ export function StartClient() {
       return;
     }
     setError(null);
-    try {
-      sessionStorage.setItem(NAME_KEY, trimmed);
-    } catch {
-      /* ignore */
-    }
+    savePendingName(trimmed);
     setStep("email");
   }
 
@@ -127,11 +127,7 @@ export function StartClient() {
       setBusy(false);
       return;
     }
-    try {
-      sessionStorage.setItem(NAME_KEY, name.trim());
-    } catch {
-      /* ignore */
-    }
+    savePendingName(name.trim());
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent("/dashboard")}`;
     const { error: err } = await sb.auth.signInWithOAuth({
       provider: "google",
