@@ -28,8 +28,8 @@ export default function ProductPage() {
             {copy.productHeading}
           </h1>
           <p className="mt-3 text-[16px] leading-[1.65] text-[var(--slate)]">
-            {copy.productSub} Full walkthrough below — then text Rejsy or create
-            an account for upcoming integrations.
+            {copy.productSub} Full walkthrough below — then text Rejsy or join
+            the waitlist for upcoming integrations.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <TextRejsyCta href={messagesHref} variant="red" />

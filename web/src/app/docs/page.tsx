@@ -48,7 +48,7 @@ export default function DocsPage() {
           Try it now
         </h2>
         <p className="mt-2 text-[14px] text-[var(--slate)]">
-          Open Messages or create an account for upcoming DSB integrations.
+          Open Messages or join the waitlist for upcoming DSB integrations.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <a

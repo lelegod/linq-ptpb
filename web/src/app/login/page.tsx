@@ -21,6 +21,14 @@ export default function LoginPage() {
           {copy.loginTitle}
         </h1>
         <p className="mt-2 text-[15px] text-[var(--slate)]">{copy.loginSub}</p>
+        <p className="mt-3 text-[14px]">
+          <a
+            href="/start"
+            className="font-medium text-[var(--red)] underline-offset-2 hover:underline"
+          >
+            {copy.navGetStarted} →
+          </a>
+        </p>
         <div className="mt-8">
           <LoginClient />
         </div>

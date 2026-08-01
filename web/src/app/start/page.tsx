@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { StartClient } from "@/app/start/StartClient";
 
 export const metadata: Metadata = {
-  title: "Get Started",
+  title: "Join the waitlist",
   description:
-    "Welcome to Rejsy — tell us your name and age, then connect with email to start planning Denmark transit in Messages.",
+    "Join the Rejsy waitlist — share your name, age, and email for early access to Denmark transit in Messages.",
 };
 
 export default function StartPage() {

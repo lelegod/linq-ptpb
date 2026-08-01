@@ -212,7 +212,7 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
         <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="/login"
-            className="hidden text-[13px] font-medium text-[var(--slate)] transition-colors hover:text-[var(--ink)] sm:inline"
+            className="hidden text-[12px] font-medium text-[var(--muted)] transition-colors hover:text-[var(--slate)] sm:inline"
           >
             {copy.navLogin}
           </a>

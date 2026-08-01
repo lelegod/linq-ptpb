@@ -41,7 +41,7 @@ export default function FaqPage() {
         </a>{" "}
         or{" "}
         <a href="/start" className="font-medium text-[var(--red)] underline-offset-2 hover:underline">
-          get started
+          join the waitlist
         </a>
         .
       </p>
