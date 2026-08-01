@@ -21,19 +21,20 @@ export function getDeps(): Deps {
     db: memoryDb,
     linq: {
       // sendChatText now returns the per-bubble message ids (for tapbacks);
-      // the port contract is void, so swallow them here. Callers that need the
-      // ids — sendMessage.ts — import linq.ts directly.
+      // the port contract is void, so swallow them here. Not optional — the
+      // one-liner from the other branch is a type error now that the return
+      // type is Promise<Array<string | null>>. Callers that need the ids —
+      // sendMessage.ts — import linq.ts directly.
       sendChatText: async (chatId, text, opts) => {
         await sendChatText(chatId, text, opts);
       },
-      // A's sendMapCard builds the URL from PUBLIC_APP_URL itself, so we drop
-      // the one the tool computed and pass the parts it wants.
       sendMapCard: (toPhone, card) =>
         sendMapCard(toPhone, {
           sessionId: card.sessionId,
           title: card.title,
           subtitle: card.subtitle,
           button: card.button,
+          url: card.url, // [B] straight to DSB
         }),
       startTyping,
       stopTyping,

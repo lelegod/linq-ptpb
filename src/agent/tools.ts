@@ -231,18 +231,25 @@ const bookTrip: ToolFn = async (args, ctx) => {
     return { ok: false, error: 'no chat id on file for this user — cannot send the ticket link' };
   }
 
-  // Rejsekort, not a ticket link. DSB's checkout is session-bound, so no URL
-  // can express "this journey" (see dsb.ts) — but Rejsekort needs no purchase
-  // at all: the user taps in at the reader. Nothing to buy, nothing to prefill,
-  // and the claim is true. deep_link_url above still holds the DSB fallback for
-  // anyone without a card.
+  // MERGE NOTE: the other branch sent a DSB action card here (sendMapCard →
+  // deepLink) plus a separate confetti confirmation. We deliberately went the
+  // other way: the Linq card didn't render reliably in the thread, and DSB's
+  // checkout is session-bound so no URL can express "this journey" (see
+  // dsb.ts). Rejsekort needs no purchase at all — the user taps in at the
+  // reader — so there is nothing to prefill and the claim is true.
+  // deep_link_url on the trip row still holds the DSB fallback.
+  //
+  // Kept from that branch: telling the user a reminder is coming.
   const copy = cardCopy(chosen);
   await ctx.deps.linq.sendChatText(
     ctx.chatId,
     // Blank lines = separate bubbles (bubbles.ts). The link gets a bubble of
     // its own with no other text, which is what makes iMessage render it as a
     // rich preview card instead of an inline blue link.
-    `✅ Locked in\n${copy.title}\n${copy.subtitle}\n\nTap in with your Rejsekort — nothing to buy.\n\n${REJSEKORT_APP_LINK}`,
+    `✅ Locked in\n${copy.title}\n${copy.subtitle}\n\n` +
+      `Tap in with your Rejsekort — nothing to buy.\n` +
+      `I'll remind you ${REMINDER_MINUTES_DEFAULT} min before departure.\n\n` +
+      `${REJSEKORT_APP_LINK}`,
   );
 
   console.log(`[B][tool] book_trip ${ctx.userId} trip=${trip.id} vendor=${ticketVendor(chosen)}`);

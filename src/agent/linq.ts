@@ -92,10 +92,13 @@ export async function sendChatText(
  */
 export async function sendMapCard(
   toPhone: string,
-  opts: { sessionId: string; title: string; subtitle: string; button?: string }
+  opts: { sessionId: string; title: string; subtitle: string; button?: string; url?: string }
 ): Promise<void> {
+  // [B] opts.url wins. The booking flow now points the card straight at DSB —
+  // no map page, no PUBLIC_APP_URL, one less thing between the tap and a ticket.
   const appUrl = process.env.PUBLIC_APP_URL;
-  if (!appUrl) throw new Error('PUBLIC_APP_URL is not set');
+  const target = opts.url ?? (appUrl ? `${appUrl.replace(/\/$/, '')}/map/${opts.sessionId}?s=${opts.sessionId}` : null);
+  if (!target) throw new Error('no card url and PUBLIC_APP_URL is not set');
 
   const res = await fetch(`${LINQ_API_BASE}/messages`, {
     method: 'POST',
@@ -107,7 +110,7 @@ export async function sendMapCard(
           experience: 'link',
           action: 'open',
           params: {
-            url: `${appUrl}/map/${opts.sessionId}?s=${opts.sessionId}`,
+            url: target,
             title: opts.title,
             subtitle: opts.subtitle,
             button: opts.button ?? 'See route',

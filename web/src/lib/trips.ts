@@ -19,10 +19,9 @@ const MOCK: Trip = {
 };
 
 function useMock(sessionId: string): boolean {
-  if (process.env.MOCK_TRIPS === "1") return true;
-  // Demo-friendly: /map/test always works without Railway
-  if (sessionId === "test" || sessionId === "demo") return true;
-  return false;
+  // Only explicit demo routes — never blanket-mock real booking sessionIds
+  // (MOCK_TRIPS=1 used to force København→Aarhus for every /map/* page)
+  return sessionId === "test" || sessionId === "demo";
 }
 
 export async function fetchTrip(sessionId: string): Promise<Trip | null> {
@@ -41,7 +40,11 @@ export async function fetchTrip(sessionId: string): Promise<Trip | null> {
       `${base.replace(/\/$/, "")}/api/trips/${sessionId}`,
       {
         next: { revalidate: 0 },
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          // Free ngrok interstitial page breaks server-side JSON fetches
+          "ngrok-skip-browser-warning": "true",
+        },
       },
     );
     if (!res.ok) return null;

@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { copy } from "@/content/copy";
+import { TextRejsyCta } from "@/components/site/TextRejsyCta";
+import { TrainAccent } from "@/components/site/TrainAccent";
 
 const thread = {
   user1: "aarhus tomorrow around 9",
   options: `københavn h → aarhus h, sat
-1. 09:03 → 12:17 · dsb · 149 kr · direct
-2. 09:33 → 12:47 · dsb · 149 kr · direct
-3. 10:03 → 13:17 · dsb · 89 kr · orange`,
+1. 09:03 → 12:17 · dsb · 149 kr
+2. 09:33 → 12:47 · dsb · 149 kr
+3. 10:03 → 13:17 · dsb · 89 kr`,
   hint: "reply 1, 2 or 3 — or react 🔽 for later",
   user2: "3",
   confirm: "🚆 locked in — i'll remind you 25 min before departure.",
@@ -28,7 +30,7 @@ function Inbound({
       className="pop flex justify-end"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="max-w-[85%] rounded-[17px] rounded-br-[6px] bg-[#E9E9EB] px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
+      <div className="max-w-[85%] rounded-[17px] rounded-br-[6px] bg-[var(--inbound)] px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
         {children}
       </div>
     </div>
@@ -51,7 +53,7 @@ function Outbound({
     >
       <div
         className={`max-w-[90%] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 text-[13px] leading-snug text-white ${
-          mono ? "font-data whitespace-pre-wrap text-[12px]" : ""
+          mono ? "font-data whitespace-pre-wrap text-[11px] sm:text-[12px]" : ""
         }`}
       >
         {children}
@@ -72,7 +74,7 @@ function Proactive({
       className="pop mt-2 flex justify-start"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="max-w-[90%] rounded-[17px] rounded-bl-[6px] border border-[var(--line)] bg-white px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
+      <div className="max-w-[90%] rounded-[17px] rounded-bl-[6px] border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
         {children}
       </div>
     </div>
@@ -88,7 +90,7 @@ function ThreadBody() {
         className="typing flex justify-start"
         style={{ ["--hide" as string]: "1500ms", animationDelay: "900ms" }}
       >
-        <div className="flex items-center gap-1 rounded-[17px] rounded-bl-[6px] bg-[#E9E9EB] px-3 py-2.5">
+        <div className="flex items-center gap-1 rounded-[17px] rounded-bl-[6px] bg-[var(--inbound)] px-3 py-2.5">
           <span className="dot" style={{ animationDelay: "0ms" }} />
           <span className="dot" style={{ animationDelay: "150ms" }} />
           <span className="dot" style={{ animationDelay: "300ms" }} />
@@ -106,50 +108,73 @@ function ThreadBody() {
   );
 }
 
-export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
+export function Hero({
+  qrDataUrl,
+  messagesHref,
+}: {
+  qrDataUrl: string;
+  messagesHref: string;
+}) {
   const [run, setRun] = useState(0);
-  // Prefer real Linq profile; fall back to sms: so CTA opens Messages to the agent
-  const linqUrl =
-    process.env.NEXT_PUBLIC_LINQ_URL &&
-    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
-      ? process.env.NEXT_PUBLIC_LINQ_URL
-      : process.env.NEXT_PUBLIC_IMESSAGE_HREF &&
-          process.env.NEXT_PUBLIC_IMESSAGE_HREF.startsWith("sms:") &&
-          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
-        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
-        : "#";
 
   return (
-    <section className="relative px-6 pb-16 pt-10 md:pt-14">
+    <section
+      id="start"
+      className="relative overflow-x-clip px-4 pb-12 pt-8 sm:px-6 md:pb-16 md:pt-14"
+    >
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden grid-bg"
         aria-hidden
       />
+      <TrainAccent />
 
-      <div className="relative mx-auto max-w-3xl text-center">
+      <div className="relative z-10 mx-auto max-w-3xl text-center">
         <h1
-          className="fadeUp text-[36px] font-semibold leading-[1.05] tracking-[-0.04em] md:text-[54px]"
+          className="fadeUp text-[32px] font-semibold leading-[1.08] tracking-[-0.04em] sm:text-[36px] md:text-[54px]"
           style={{ animationDelay: "0ms" }}
         >
-          {copy.headline[0]}
-          <br />
-          {copy.headline[1]}
+          {copy.meet}{" "}
+          <em className="font-display font-medium italic text-[var(--red)]">
+            {copy.brand}
+          </em>
+          {copy.meetRest}
         </h1>
         <p
-          className="fadeUp mx-auto mt-4 max-w-xl text-[16px] leading-[1.65] text-[var(--slate)]"
+          className="fadeUp mx-auto mt-3 max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:mt-4 sm:text-[16px] sm:leading-[1.65]"
           style={{ animationDelay: "110ms" }}
         >
           {copy.subhead}
         </p>
+        <p
+          className="fadeUp mx-auto mt-3 max-w-md font-data text-[11px] uppercase tracking-[0.06em] text-[var(--muted)] sm:text-[12px]"
+          style={{ animationDelay: "160ms" }}
+        >
+          {copy.proactiveLine}
+        </p>
 
-        <div className="relative mx-auto mt-10 flex w-[278px] flex-col items-center md:w-[300px]">
+        {/* Mobile: CTA first so the fold is clean */}
+        <div
+          className="fadeUp mt-6 flex flex-col items-center gap-2 md:hidden"
+          style={{ animationDelay: "200ms" }}
+        >
+          <TextRejsyCta
+            href={messagesHref}
+            variant="red"
+            className="w-full max-w-sm"
+          />
+          <p className="font-data text-[10px] text-[var(--muted)] sm:text-[11px]">
+            {copy.ctaNote}
+          </p>
+        </div>
+
+        <div className="relative mx-auto mt-8 flex w-full max-w-[278px] flex-col items-center md:mt-10 md:max-w-[300px]">
           <div
-            className="phoneIn relative w-full rounded-[42px] border border-[var(--ink)] bg-[var(--ink)] p-[8px]"
+            className="phoneIn relative w-full rounded-[36px] border border-[var(--ink)] bg-[var(--ink)] p-[7px] sm:rounded-[42px] sm:p-[8px]"
             style={{ animationDelay: "260ms" }}
           >
-            <div className="overflow-hidden rounded-[34px] bg-[var(--paper)]">
+            <div className="overflow-hidden rounded-[30px] bg-[var(--paper)] sm:rounded-[34px]">
               <div className="relative flex items-center justify-center border-b border-[var(--line)] px-3 pb-2 pt-3">
-                <div className="absolute left-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rounded-full bg-[var(--ink)]" />
+                <div className="absolute left-1/2 top-1.5 h-3.5 w-16 -translate-x-1/2 rounded-full bg-[var(--ink)] sm:h-4 sm:w-20" />
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--red)] text-[11px] font-semibold text-white">
                     R
@@ -163,9 +188,8 @@ export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
               </div>
             </div>
 
-            {/* desktop annotation — outside phone frame */}
             <div
-              className="fadeUp pointer-events-none absolute top-[70%] left-[calc(100%+12px)] hidden w-[7.5rem] text-left sm:block"
+              className="fadeUp pointer-events-none absolute top-[70%] left-[calc(100%+12px)] hidden w-[7.5rem] text-left md:block"
               style={{ animationDelay: "3700ms" }}
             >
               <div className="mb-1.5 h-[2px] w-2 bg-[var(--red)]" />
@@ -176,7 +200,7 @@ export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
           </div>
 
           <p
-            className="fadeUp mt-3 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] sm:hidden"
+            className="fadeUp mt-3 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] md:hidden"
             style={{ animationDelay: "3700ms" }}
           >
             ↑ sent without being asked
@@ -191,38 +215,35 @@ export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
           </button>
         </div>
 
+        {/* Desktop: QR + Text CTA (same sms: payload) */}
         <div
-          className="fadeUp mt-8 flex flex-col items-center gap-3"
+          className="fadeUp mt-8 hidden flex-col items-center gap-3 md:flex"
           style={{ animationDelay: "4000ms" }}
         >
-          <a
-            href={linqUrl}
-            className="inline-flex items-center justify-center rounded-[10px] bg-[var(--red)] px-6 py-3 text-[15px] font-semibold text-white"
-          >
-            {copy.cta}
-          </a>
-          <p className="font-data text-[11px] text-[var(--muted)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={qrDataUrl}
+            alt="QR code — scan on iPhone to open Rejsy in Messages"
+            width={140}
+            height={140}
+            className="border border-[var(--line)] bg-[var(--paper)] p-2"
+          />
+          <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
+            {copy.qrHint}
+          </p>
+          <p className="max-w-xs text-[13px] text-[var(--slate)]">
+            Point your iPhone camera at the code to text Rejsy.
+          </p>
+          <TextRejsyCta href={messagesHref} variant="red" />
+          <p className="font-data text-[10px] text-[var(--muted)] sm:text-[11px]">
             {copy.ctaNote}
           </p>
-          {qrDataUrl ? (
-            <div className="mt-2 flex flex-col items-center gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={qrDataUrl}
-                alt="QR code to open Rejsy in Messages"
-                width={112}
-                height={112}
-                className="border border-[var(--line)] bg-[var(--paper)] p-2"
-              />
-              <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
-                scan on iphone · opens messages
-              </p>
-            </div>
-          ) : (
-            <p className="mt-2 max-w-xs font-data text-[10px] text-[var(--muted)]">
-              QR needs NEXT_PUBLIC_IMESSAGE_HREF (sms:+45… from Person A)
-            </p>
-          )}
+          <a
+            href="/product"
+            className="mt-1 text-[13px] font-medium text-[var(--slate)] underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--ink)]"
+          >
+            {copy.ctaExplore}
+          </a>
         </div>
       </div>
     </section>

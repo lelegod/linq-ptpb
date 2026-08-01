@@ -16,25 +16,26 @@ const plusFeatures = [
   "Cancel anytime",
 ];
 
-export function Pricing() {
-  const linqUrl =
-    process.env.NEXT_PUBLIC_LINQ_URL &&
-    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
-      ? process.env.NEXT_PUBLIC_LINQ_URL
-      : process.env.NEXT_PUBLIC_IMESSAGE_HREF?.startsWith("sms:") &&
-          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
-        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
-        : "#";
-
+export function Pricing({
+  messagesHref,
+  showEyebrow = true,
+}: {
+  messagesHref: string;
+  showEyebrow?: boolean;
+}) {
   return (
-    <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">
+    <section id="pricing" className="bg-[var(--paper)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto max-w-4xl">
-        <p className="max-w-xl text-[16px] leading-[1.65] text-[var(--slate)]">
-          {copy.pricingEyebrow}
-        </p>
+        {showEyebrow ? (
+          <p className="max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:text-[16px] sm:leading-[1.65]">
+            {copy.pricingEyebrow}
+          </p>
+        ) : null}
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          <div className="rounded-[12px] border border-[var(--line)] p-6">
+        <div
+          className={`grid gap-4 md:grid-cols-2 ${showEyebrow ? "mt-8 md:mt-10" : ""}`}
+        >
+          <div className="rounded-[12px] border border-[var(--line)] p-5 sm:p-6">
             <h3 className="text-[20px] font-semibold tracking-[-0.03em]">Free</h3>
             <p className="mt-1 font-data text-[13px] text-[var(--muted)]">
               0 kr
@@ -45,14 +46,14 @@ export function Pricing() {
               ))}
             </ul>
             <a
-              href={linqUrl}
-              className="mt-8 flex w-full items-center justify-center rounded-[10px] border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)]"
+              href={messagesHref}
+              className="mt-8 flex w-full items-center justify-center rounded-[10px] border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)] hover:border-[var(--red)]/40"
             >
               {copy.cta}
             </a>
           </div>
 
-          <div className="relative rounded-[12px] border border-[var(--red)] p-6">
+          <div className="relative rounded-[12px] border border-[var(--red)] p-5 sm:p-6">
             <span className="absolute -top-2.5 right-4 rounded bg-[var(--red)] px-2 py-0.5 font-data text-[10px] uppercase tracking-[0.06em] text-white">
               Most popular
             </span>
@@ -71,10 +72,10 @@ export function Pricing() {
               href="/upgrade"
               className="mt-8 flex w-full items-center justify-center rounded-[10px] bg-[var(--red)] px-4 py-3 text-[14px] font-semibold text-white"
             >
-              Unlock Plus
+              {copy.plusCta}
             </a>
             <p className="mt-3 text-center font-data text-[10px] text-[var(--muted)]">
-              text rejsy to unlock — or open the link from iMessage
+              {copy.plusNote}
             </p>
           </div>
         </div>

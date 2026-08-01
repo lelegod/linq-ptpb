@@ -1,10 +1,27 @@
-import { copy } from "@/content/copy";
-
 export function Footer() {
   return (
-    <footer className="flex flex-col gap-2 border-t border-[var(--line)] bg-[var(--paper)] px-6 py-6 text-[12px] text-[var(--slate)] md:flex-row md:items-center md:justify-between md:px-10">
-      <p>{copy.footerLeft}</p>
-      <p>{copy.footerRight}</p>
+    <footer className="px-4 py-10 sm:px-6">
+      <p className="text-center text-[13px] text-[var(--slate)]">
+        <span>rejsy.app</span>
+        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+          ·
+        </span>
+        <a
+          href="/privacy"
+          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+        >
+          Privacy
+        </a>
+        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+          ·
+        </span>
+        <a
+          href="/terms"
+          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+        >
+          Terms
+        </a>
+      </p>
     </footer>
   );
 }
