@@ -19,10 +19,9 @@ const MOCK: Trip = {
 };
 
 function useMock(sessionId: string): boolean {
-  if (process.env.MOCK_TRIPS === "1") return true;
-  // Demo-friendly: /map/test always works without Railway
-  if (sessionId === "test" || sessionId === "demo") return true;
-  return false;
+  // Only explicit demo routes — never blanket-mock real booking sessionIds
+  // (MOCK_TRIPS=1 used to force København→Aarhus for every /map/* page)
+  return sessionId === "test" || sessionId === "demo";
 }
 
 export async function fetchTrip(sessionId: string): Promise<Trip | null> {
