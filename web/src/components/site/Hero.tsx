@@ -108,7 +108,16 @@ function ThreadBody() {
 
 export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
   const [run, setRun] = useState(0);
-  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "https://linq.app/rejsy";
+  // Prefer real Linq profile; fall back to sms: so CTA opens Messages to the agent
+  const linqUrl =
+    process.env.NEXT_PUBLIC_LINQ_URL &&
+    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
+      ? process.env.NEXT_PUBLIC_LINQ_URL
+      : process.env.NEXT_PUBLIC_IMESSAGE_HREF &&
+          process.env.NEXT_PUBLIC_IMESSAGE_HREF.startsWith("sms:") &&
+          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
+        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
+        : "#";
 
   return (
     <section className="relative px-6 pb-16 pt-10 md:pt-14">
@@ -200,16 +209,20 @@ export function Hero({ qrDataUrl }: { qrDataUrl?: string | null }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={qrDataUrl}
-                alt="QR code to open Rejsy on Linq"
-                width={96}
-                height={96}
-                className="border border-[var(--line)] bg-[var(--paper)] p-1"
+                alt="QR code to open Rejsy in Messages"
+                width={112}
+                height={112}
+                className="border border-[var(--line)] bg-[var(--paper)] p-2"
               />
               <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
-                scan on iphone
+                scan on iphone · opens messages
               </p>
             </div>
-          ) : null}
+          ) : (
+            <p className="mt-2 max-w-xs font-data text-[10px] text-[var(--muted)]">
+              QR needs NEXT_PUBLIC_IMESSAGE_HREF (sms:+45… from Person A)
+            </p>
+          )}
         </div>
       </div>
     </section>

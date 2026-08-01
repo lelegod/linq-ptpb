@@ -1,12 +1,20 @@
 import QRCode from "qrcode";
-import { getLinqTarget } from "@/lib/env";
+import { getQrTarget } from "@/lib/env";
 
 export async function linqQrDataUrl(): Promise<string | null> {
+  const target = getQrTarget();
+  if (!target) {
+    console.warn(
+      "QR skipped: set NEXT_PUBLIC_IMESSAGE_HREF=sms:+45…&body=hi%20rejsy (real Linq number)",
+    );
+    return null;
+  }
   try {
-    return await QRCode.toDataURL(getLinqTarget(), {
-      margin: 1,
-      width: 120,
-      color: { dark: "#0B0B0C", light: "#00000000" },
+    // Opaque light color — transparent QR often fails Camera scan
+    return await QRCode.toDataURL(target, {
+      margin: 2,
+      width: 160,
+      color: { dark: "#0B0B0C", light: "#FDFBF7" },
       errorCorrectionLevel: "M",
     });
   } catch (e) {

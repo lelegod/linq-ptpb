@@ -17,7 +17,14 @@ const plusFeatures = [
 ];
 
 export function Pricing() {
-  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL || "https://linq.app/rejsy";
+  const linqUrl =
+    process.env.NEXT_PUBLIC_LINQ_URL &&
+    !/linq\.app\/rejsy|YOUR-|XXXX/i.test(process.env.NEXT_PUBLIC_LINQ_URL)
+      ? process.env.NEXT_PUBLIC_LINQ_URL
+      : process.env.NEXT_PUBLIC_IMESSAGE_HREF?.startsWith("sms:") &&
+          !/XXXX|YOUR-/i.test(process.env.NEXT_PUBLIC_IMESSAGE_HREF)
+        ? process.env.NEXT_PUBLIC_IMESSAGE_HREF
+        : "#";
 
   return (
     <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">
