@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rejsy web (Person C)
 
-## Getting Started
+Next.js App Router marketing site + map + upgrade UI.
 
-First, run the development server:
+## Local
 
 ```bash
+cd web
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Mock map without Railway:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+MOCK_TRIPS=1 npm run dev
+# visit /map/test
+```
 
-## Learn More
+## Vercel
 
-To learn more about Next.js, take a look at the following resources:
+Project root: **`web`** (not repo root).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd web
+npx vercel --yes
+# then prod:
+npx vercel --prod --yes
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set env in Vercel dashboard (or `vercel env add`):
 
-## Deploy on Vercel
+| Key | Notes |
+|---|---|
+| `NEXT_PUBLIC_LINQ_URL` | Linq profile / open URL |
+| `NEXT_PUBLIC_IMESSAGE_HREF` | optional `sms:` deep link |
+| `BACKEND_URL` | Railway origin (no trailing slash) |
+| `PUBLIC_APP_URL` | this Vercel URL |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Do **not** put `STRIPE_SECRET_KEY` on Vercel — Stripe SDK + webhook run on Railway. On Vercel, `/api/checkout` proxies to `${BACKEND_URL}/api/checkout`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Railway Stripe (same codebase paths)
+
+When deploying Stripe routes on Railway (or running locally with secrets):
+
+- `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`
+- `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`
+- Webhook URL: `https://<railway>/api/stripe/webhook`
+- Success/cancel URLs use `PUBLIC_APP_URL` (Vercel)

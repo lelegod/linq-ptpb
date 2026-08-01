@@ -1,0 +1,77 @@
+import { copy } from "@/content/copy";
+
+const freeFeatures = [
+  "3 trip plans",
+  "Booking hand-off",
+  "Leave-now reminders",
+  "No card required",
+];
+
+const plusFeatures = [
+  "Unlimited planning",
+  "Booking hand-off",
+  "Leave-now reminders",
+  "Live delay alerts",
+  "Saved places",
+  "Cancel anytime",
+];
+
+export function Pricing() {
+  const linqUrl = process.env.NEXT_PUBLIC_LINQ_URL ?? "#";
+
+  return (
+    <section id="pricing" className="bg-[var(--paper)] px-6 py-16 md:px-10 md:py-20">
+      <div className="mx-auto max-w-4xl">
+        <p className="max-w-xl text-[16px] leading-[1.65] text-[var(--slate)]">
+          {copy.pricingEyebrow}
+        </p>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <div className="rounded-[12px] border border-[var(--line)] p-6">
+            <h3 className="text-[20px] font-semibold tracking-[-0.03em]">Free</h3>
+            <p className="mt-1 font-data text-[13px] text-[var(--muted)]">
+              0 kr
+            </p>
+            <ul className="mt-6 space-y-2.5 text-[14px] text-[var(--slate)]">
+              {freeFeatures.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ul>
+            <a
+              href={linqUrl}
+              className="mt-8 flex w-full items-center justify-center rounded-[10px] border border-[var(--line)] px-4 py-3 text-[14px] font-semibold text-[var(--ink)]"
+            >
+              {copy.cta}
+            </a>
+          </div>
+
+          <div className="relative rounded-[12px] border border-[var(--red)] p-6">
+            <span className="absolute -top-2.5 right-4 rounded bg-[var(--red)] px-2 py-0.5 font-data text-[10px] uppercase tracking-[0.06em] text-white">
+              Most popular
+            </span>
+            <h3 className="text-[20px] font-semibold tracking-[-0.03em]">
+              Rejsy Plus
+            </h3>
+            <p className="mt-1 font-data text-[13px] text-[var(--muted)]">
+              29 kr/mo
+            </p>
+            <ul className="mt-6 space-y-2.5 text-[14px] text-[var(--slate)]">
+              {plusFeatures.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ul>
+            <a
+              href="/upgrade"
+              className="mt-8 flex w-full items-center justify-center rounded-[10px] bg-[var(--red)] px-4 py-3 text-[14px] font-semibold text-white"
+            >
+              Unlock Plus
+            </a>
+            <p className="mt-3 text-center font-data text-[10px] text-[var(--muted)]">
+              text rejsy to unlock — or open the link from iMessage
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
