@@ -16,15 +16,25 @@ const plusFeatures = [
   "Cancel anytime",
 ];
 
-export function Pricing({ messagesHref }: { messagesHref: string }) {
+export function Pricing({
+  messagesHref,
+  showEyebrow = true,
+}: {
+  messagesHref: string;
+  showEyebrow?: boolean;
+}) {
   return (
     <section id="pricing" className="bg-[var(--paper)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
       <div className="mx-auto max-w-4xl">
-        <p className="max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:text-[16px] sm:leading-[1.65]">
-          {copy.pricingEyebrow}
-        </p>
+        {showEyebrow ? (
+          <p className="max-w-xl text-[15px] leading-[1.6] text-[var(--slate)] sm:text-[16px] sm:leading-[1.65]">
+            {copy.pricingEyebrow}
+          </p>
+        ) : null}
 
-        <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-2">
+        <div
+          className={`grid gap-4 md:grid-cols-2 ${showEyebrow ? "mt-8 md:mt-10" : ""}`}
+        >
           <div className="rounded-[12px] border border-[var(--line)] p-5 sm:p-6">
             <h3 className="text-[20px] font-semibold tracking-[-0.03em]">Free</h3>
             <p className="mt-1 font-data text-[13px] text-[var(--muted)]">

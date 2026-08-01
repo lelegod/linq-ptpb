@@ -1,11 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getSupabaseBrowser, getSupabaseEnv } from "@/lib/supabase/client";
 
 type Mode = "magic" | "password";
 
+function nextPath(): string {
+  if (typeof window === "undefined") return "/dashboard";
+  const n = new URLSearchParams(window.location.search).get("next");
+  return n && n.startsWith("/") ? n : "/dashboard";
+}
+
 export function LoginClient() {
+  const router = useRouter();
   const { configured } = getSupabaseEnv();
   const [mode, setMode] = useState<Mode>("magic");
   const [email, setEmail] = useState("");
@@ -40,6 +48,11 @@ export function LoginClient() {
         const { error: exchangeErr } =
           await sb.auth.exchangeCodeForSession(code);
         if (!cancelled && exchangeErr) setError(exchangeErr.message);
+        else if (!cancelled) {
+          window.history.replaceState({}, "", "/login");
+          router.replace(nextPath());
+          return;
+        }
         window.history.replaceState({}, "", "/login");
       }
       if (!cancelled) await refreshSession();
@@ -55,7 +68,7 @@ export function LoginClient() {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [configured, refreshSession]);
+  }, [configured, refreshSession, router]);
 
   if (!configured) {
     return (
@@ -87,7 +100,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
     setStatus(null);
     const sb = getSupabaseBrowser();
     if (!sb) return;
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
     const { error: err } = await sb.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: redirectTo },
@@ -115,6 +128,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
       setBusy(false);
       setStatus("Signed in.");
       await refreshSession();
+      router.replace(nextPath());
       return;
     }
     const { error: signUpErr } = await sb.auth.signUp({ email, password });
@@ -177,8 +191,40 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
             ))}
           </div>
 
+          <button
+            type="button"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              setError(null);
+              const sb = getSupabaseBrowser();
+              if (!sb) {
+                setBusy(false);
+                return;
+              }
+              const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
+              const { error: err } = await sb.auth.signInWithOAuth({
+                provider: "google",
+                options: { redirectTo },
+              });
+              if (err) {
+                setBusy(false);
+                setError(err.message);
+              }
+            }}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--paper)] py-3 text-[14px] font-semibold disabled:opacity-60"
+          >
+            Continue with Google
+          </button>
+
+          <div className="my-4 flex items-center gap-3 text-[12px] text-[var(--muted)]">
+            <span className="h-px flex-1 bg-[var(--line)]" />
+            or email
+            <span className="h-px flex-1 bg-[var(--line)]" />
+          </div>
+
           <form
-            className="mt-6 space-y-4"
+            className="space-y-4"
             onSubmit={mode === "magic" ? onMagic : onPassword}
           >
             <label className="block">

@@ -239,7 +239,7 @@ export function Hero({
             {copy.ctaNote}
           </p>
           <a
-            href="#product"
+            href="/product"
             className="mt-1 text-[13px] font-medium text-[var(--slate)] underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--ink)]"
           >
             {copy.ctaExplore}

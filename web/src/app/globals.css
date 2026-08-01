@@ -200,6 +200,42 @@ body {
   box-shadow: 0 2px 8px rgba(11, 11, 12, 0.06);
 }
 
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-enter {
+  animation: pageEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dropdown-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.18s;
+}
+
+.dropdown-closed {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease,
+    visibility 0.14s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -207,7 +243,8 @@ body {
   .pop,
   .fadeUp,
   .phoneIn,
-  .train-exit {
+  .train-exit,
+  .page-enter {
     animation: none;
     opacity: 1;
     transform: none;
@@ -221,5 +258,9 @@ body {
   }
   .scroll-train {
     transform: none !important;
+  }
+  .dropdown-open,
+  .dropdown-closed {
+    transition: none;
   }
 }

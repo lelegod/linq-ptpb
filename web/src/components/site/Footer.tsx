@@ -1,25 +1,27 @@
-import { copy } from "@/content/copy";
-
 export function Footer() {
   return (
-    <footer className="flex flex-col gap-3 border-t border-[var(--line)] bg-[var(--paper)] px-4 py-6 text-[12px] text-[var(--slate)] sm:px-6 md:flex-row md:items-center md:justify-between md:px-8">
-      <p>
-        <span className="font-semibold text-[var(--ink)]">rejsy</span>
-        <span className="mx-2 text-[var(--line)]">·</span>
-        {copy.footerLeft}
+    <footer className="px-4 py-10 sm:px-6">
+      <p className="text-center text-[13px] text-[var(--slate)]">
+        <span>rejsy.app</span>
+        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+          ·
+        </span>
+        <a
+          href="/privacy"
+          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+        >
+          Privacy
+        </a>
+        <span className="mx-2 text-[var(--muted)]" aria-hidden>
+          ·
+        </span>
+        <a
+          href="/terms"
+          className="underline decoration-[var(--slate)]/50 underline-offset-[3px] transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]"
+        >
+          Terms
+        </a>
       </p>
-      <div className="flex flex-wrap items-center gap-4">
-        <a href="/login" className="hover:text-[var(--ink)]">
-          Login
-        </a>
-        <a href="#product" className="hover:text-[var(--ink)]">
-          Product
-        </a>
-        <a href="#pricing" className="hover:text-[var(--ink)]">
-          Pricing
-        </a>
-        <p>{copy.footerRight}</p>
-      </div>
     </footer>
   );
 }

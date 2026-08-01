@@ -2,17 +2,19 @@ import { NextResponse } from "next/server";
 
 /**
  * Supabase redirects magic-link / OAuth here with ?code=.
- * Forward to /login so the browser client can exchange the code into a session
- * (no SSR cookie jar required).
+ * Forward to `next` (default /dashboard) so the browser client can exchange
+ * the code into a session.
  */
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const target = new URL("/login", url.origin);
+  const nextRaw = url.searchParams.get("next") || "/dashboard";
+  const nextPath = nextRaw.startsWith("/") ? nextRaw : "/dashboard";
+  const target = new URL(nextPath, url.origin);
+
   url.searchParams.forEach((value, key) => {
+    if (key === "next") return;
     target.searchParams.set(key, value);
   });
-  if (!target.searchParams.has("next")) {
-    target.searchParams.set("next", "/login");
-  }
+
   return NextResponse.redirect(target);
 }
