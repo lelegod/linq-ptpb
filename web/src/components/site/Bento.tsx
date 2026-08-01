@@ -69,6 +69,22 @@ function IconDatabase() {
   );
 }
 
+function OutBubble({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mt-4 max-w-[260px] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+      {children}
+    </div>
+  );
+}
+
+function ProactiveBubble({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mt-4 max-w-[260px] rounded-[17px] rounded-bl-[6px] border border-white/35 bg-white/10 px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+      {children}
+    </div>
+  );
+}
+
 export function Bento() {
   return (
     <section className="bg-[var(--ink)] px-4 py-12 sm:px-6 md:px-10 md:py-20">
@@ -81,7 +97,6 @@ export function Bento() {
         </h2>
 
         <div className="mt-8 grid gap-[10px]">
-          {/* Row 1 */}
           <div className="grid gap-[10px] md:grid-cols-[1.45fr_1fr]">
             <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
               <div className="mb-3 text-white">
@@ -94,7 +109,7 @@ export function Bento() {
                 Tap 🔽 on the options and it pages forward. No retyping your
                 search, no starting over.
               </p>
-              <div className="mt-4 max-w-[240px] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+              <OutBubble>
                 4. 10:33 → 13:47 · dsb · 149 kr
                 <br />
                 5. 11:03 → 14:17 · dsb · 89 kr
@@ -102,7 +117,7 @@ export function Bento() {
                 <span className="mt-1 inline-block rounded bg-white/20 px-1.5 py-0.5">
                   🔽
                 </span>
-              </div>
+              </OutBubble>
             </div>
 
             <div className="grid gap-[10px]">
@@ -117,6 +132,9 @@ export function Bento() {
                   25 minutes before departure, with your platform. You didn&apos;t
                   ask.
                 </p>
+                <ProactiveBubble>
+                  🕘 leave in 25 min — platform 3, københavn h
+                </ProactiveBubble>
               </div>
               <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
                 <div className="mb-3">
@@ -129,11 +147,15 @@ export function Bento() {
                   Every price, platform and delay comes from Rejseplanen. If we
                   don&apos;t have it, we say so.
                 </p>
+                <OutBubble>
+                  on time · platform 3
+                  <br />
+                  149 kr · dsb · direct
+                </OutBubble>
               </div>
             </div>
           </div>
 
-          {/* Row 2 — 2 cols (no "saved places" until confirmed) */}
           <div className="grid gap-[10px] md:grid-cols-2">
             <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
               <div className="mb-3">
@@ -145,6 +167,9 @@ export function Bento() {
               <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
                 &ldquo;odense before 5&rdquo; is a complete search.
               </p>
+              <OutBubble>
+                got it — 3 options to odense before 17:00
+              </OutBubble>
             </div>
             <div className="rounded-[14px] bg-[var(--card-dark)] p-5 text-white">
               <div className="mb-3">
@@ -156,6 +181,11 @@ export function Bento() {
               <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
                 Straight into DSB. We never touch your card.
               </p>
+              <OutBubble>
+                🗺️ københavn h → aarhus h
+                <br />
+                sat 09:03 · [ See route → ]
+              </OutBubble>
             </div>
           </div>
         </div>

@@ -155,6 +155,12 @@ export function Hero({
         >
           {copy.subhead}
         </p>
+        <p
+          className="fadeUp mx-auto mt-3 max-w-md font-data text-[11px] uppercase tracking-[0.06em] text-[var(--muted)] sm:text-[12px]"
+          style={{ animationDelay: "160ms" }}
+        >
+          {copy.proactiveLine}
+        </p>
 
         {/* Mobile: CTA first so the fold is clean; phone pulls scroll */}
         <div

@@ -62,10 +62,10 @@ export function Pricing({ messagesHref }: { messagesHref: string }) {
               href="/upgrade"
               className="mt-8 flex w-full items-center justify-center rounded-[10px] bg-[var(--red)] px-4 py-3 text-[14px] font-semibold text-white"
             >
-              Unlock Plus
+              {copy.plusCta}
             </a>
             <p className="mt-3 text-center font-data text-[10px] text-[var(--muted)]">
-              text rejsy to unlock — or open the link from iMessage
+              {copy.plusNote}
             </p>
           </div>
         </div>
