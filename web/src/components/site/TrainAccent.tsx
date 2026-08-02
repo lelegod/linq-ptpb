@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { DanishEmuHeroSvg } from "@/components/site/DanishEmuHeroSvg";
 
-/** Soft Danish EMU watermark — polished pass-by + light scroll parallax. */
+/** Soft Danish EMU watermark — smooth pass-by + light scroll parallax. */
 export function TrainAccent() {
   const parallaxRef = useRef<HTMLDivElement>(null);
 
@@ -18,9 +18,8 @@ export function TrainAccent() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const y = window.scrollY;
-        // Soft drift with the page — mostly lateral, tiny lift.
-        const x = Math.min(y * 0.1, 40);
-        const vy = Math.min(y * 0.025, 14);
+        const x = Math.min(y * 0.08, 32);
+        const vy = Math.min(y * 0.02, 10);
         el.style.transform = `translate3d(${x}px, ${vy}px, 0)`;
       });
     };
@@ -39,28 +38,20 @@ export function TrainAccent() {
       aria-hidden
     >
       <div
-        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] -translate-x-1/2 -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] md:w-[min(120vw,1360px)]"
+        className="absolute left-1/2 top-[52%] w-[min(200vw,1040px)] -translate-x-1/2 -translate-y-1/2 sm:top-[50%] sm:w-[min(155vw,1200px)] md:w-[min(125vw,1280px)]"
         style={{
           WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%)",
           maskImage:
-            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%)",
         }}
       >
         <div className="train-glide will-change-transform">
           <div
             ref={parallaxRef}
-            className="scroll-train opacity-[0.09] will-change-transform sm:opacity-[0.12] md:opacity-[0.15]"
+            className="scroll-train opacity-[0.1] will-change-transform sm:opacity-[0.13] md:opacity-[0.16]"
           >
-            <Image
-              src="/train-hero.webp"
-              alt=""
-              width={1600}
-              height={273}
-              priority
-              className="h-auto w-full select-none"
-              sizes="(max-width: 640px) 190vw, (max-width: 768px) 150vw, 1360px"
-            />
+            <DanishEmuHeroSvg className="h-auto w-full select-none" />
           </div>
         </div>
       </div>
