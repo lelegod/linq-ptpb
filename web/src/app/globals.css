@@ -169,17 +169,23 @@ video {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Hero watermark: slow horizontal pass (EMU glide) */
+/* Hero watermark: smooth Danish EMU pass-by (ease in/cruise/ease out) */
 @keyframes trainGlide {
   0% {
-    transform: translate3d(-6%, 0, 0);
+    transform: translate3d(-22%, 0, 0);
+  }
+  15% {
+    transform: translate3d(-14%, 0, 0);
+  }
+  85% {
+    transform: translate3d(14%, 0, 0);
   }
   100% {
-    transform: translate3d(6%, 0, 0);
+    transform: translate3d(22%, 0, 0);
   }
 }
 .train-glide {
-  animation: trainGlide 36s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  animation: trainGlide 32s cubic-bezier(0.4, 0.0, 0.2, 1) infinite alternate;
 }
 
 @keyframes trackPulse {

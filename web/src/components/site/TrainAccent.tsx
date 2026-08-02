@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-/** Soft Danish EMU watermark — slow glide + light scroll parallax behind hero copy. */
+/** Soft Danish EMU watermark — polished pass-by + light scroll parallax. */
 export function TrainAccent() {
   const parallaxRef = useRef<HTMLDivElement>(null);
 
@@ -18,9 +18,9 @@ export function TrainAccent() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const y = window.scrollY;
-        // Subtle pass-by feel: mostly horizontal, tiny vertical drift.
-        const x = Math.min(y * 0.12, 48);
-        const vy = Math.min(y * 0.03, 18);
+        // Soft drift with the page — mostly lateral, tiny lift.
+        const x = Math.min(y * 0.1, 40);
+        const vy = Math.min(y * 0.025, 14);
         el.style.transform = `translate3d(${x}px, ${vy}px, 0)`;
       });
     };
@@ -38,20 +38,28 @@ export function TrainAccent() {
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       aria-hidden
     >
-      <div className="absolute left-1/2 top-[50%] w-[min(160vw,920px)] -translate-x-1/2 -translate-y-1/2 sm:top-[48%] sm:w-[min(130vw,1100px)] md:w-[min(110vw,1280px)]">
+      <div
+        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] -translate-x-1/2 -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] md:w-[min(120vw,1360px)]"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+          maskImage:
+            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+        }}
+      >
         <div className="train-glide will-change-transform">
           <div
             ref={parallaxRef}
-            className="scroll-train opacity-[0.10] will-change-transform sm:opacity-[0.13] md:opacity-[0.16]"
+            className="scroll-train opacity-[0.09] will-change-transform sm:opacity-[0.12] md:opacity-[0.15]"
           >
             <Image
               src="/train-hero.webp"
               alt=""
-              width={1531}
-              height={334}
+              width={1600}
+              height={273}
               priority
               className="h-auto w-full select-none"
-              sizes="(max-width: 640px) 160vw, (max-width: 768px) 130vw, 1280px"
+              sizes="(max-width: 640px) 190vw, (max-width: 768px) 150vw, 1360px"
             />
           </div>
         </div>
