@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { copy, productMenu, resourcesMenu } from "@/content/copy";
+import { playHeroTrain } from "@/lib/trainPlay";
 
 type MenuKey = "product" | "resources" | null;
 
@@ -107,6 +108,17 @@ export function Nav({ messagesHref }: { messagesHref: string }) {
           href="/"
           className="flex min-h-11 items-center gap-2.5"
           aria-label="Rejsy home"
+          onMouseEnter={playHeroTrain}
+          onFocus={playHeroTrain}
+          onClick={(e) => {
+            playHeroTrain();
+            if (
+              typeof window !== "undefined" &&
+              window.location.pathname === "/"
+            ) {
+              e.preventDefault();
+            }
+          }}
         >
           <span className="flex items-end gap-[3px]" aria-hidden>
             <span className="h-3 w-1 bg-[var(--red)] opacity-100" />

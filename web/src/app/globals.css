@@ -169,23 +169,23 @@ video {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Hero watermark: one-way Danish EMU pass (fade masked at edges) */
-@keyframes trainGlide {
+/* Hero watermark: one-shot glide on Rejsy brand hover / tap */
+@keyframes trainGlideOnce {
   0% {
-    transform: translate3d(-26%, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
-  6% {
-    transform: translate3d(-22%, 0, 0);
+  14% {
+    transform: translate3d(-18%, 0, 0);
   }
-  94% {
-    transform: translate3d(22%, 0, 0);
+  86% {
+    transform: translate3d(20%, 0, 0);
   }
   100% {
-    transform: translate3d(26%, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
-.train-glide {
-  animation: trainGlide 42s cubic-bezier(0.37, 0, 0.18, 1) infinite;
+.train-glide-play {
+  animation: trainGlideOnce 3.1s cubic-bezier(0.45, 0.05, 0.22, 1) 1;
 }
 
 @keyframes trackPulse {
@@ -282,7 +282,7 @@ video {
   .fadeUp,
   .phoneIn,
   .train-exit,
-  .train-glide,
+  .train-glide-play,
   .page-enter {
     animation: none;
     opacity: 1;

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { copy } from "@/content/copy";
 import { TextRejsyCta } from "@/components/site/TextRejsyCta";
 import { TrainAccent } from "@/components/site/TrainAccent";
+import { playHeroTrain } from "@/lib/trainPlay";
 
 const thread = {
   user1: "aarhus tomorrow around 9",
@@ -134,9 +135,16 @@ export function Hero({
           style={{ animationDelay: "0ms" }}
         >
           {copy.meet}{" "}
-          <em className="font-display font-medium italic text-[var(--red)]">
+          <button
+            type="button"
+            onMouseEnter={playHeroTrain}
+            onFocus={playHeroTrain}
+            onClick={playHeroTrain}
+            className="font-display font-medium italic text-[var(--red)] underline decoration-transparent underline-offset-4 transition-[text-decoration-color] hover:decoration-[var(--red)]/35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--red)]"
+            aria-label="Play train animation"
+          >
             {copy.brand}
-          </em>
+          </button>
           {copy.meetRest}
         </h1>
         <p
