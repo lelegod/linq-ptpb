@@ -150,6 +150,25 @@ video {
   animation: phoneIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Soft idle glide on CTA train mark */
+@keyframes trainIdle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-18%);
+  }
+}
+.train-idle {
+  animation: trainIdle 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .train-idle {
+    animation: none;
+  }
+}
+
 /* Train exits forward (left — matches left-facing train icon) before Messages */
 @keyframes trainExit {
   0% {
@@ -169,9 +188,9 @@ video {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Refined graphic watermark — clean contrast, no muddy posterize */
+/* Refined graphic watermark — clean, slightly cooler, less neon red */
 .train-hero-mark {
-  filter: url(#train-refine) contrast(1.22) saturate(1.18) brightness(1.03);
+  filter: url(#train-refine) contrast(1.14) saturate(0.92) brightness(1.04);
 }
 
 /* Hero watermark: one-shot glide on Rejsy brand hover / tap */

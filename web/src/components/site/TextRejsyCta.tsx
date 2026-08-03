@@ -20,7 +20,7 @@ function ChatIcon() {
   );
 }
 
-/** Premium red/white locomotive mark — faces left (same as train-hero). */
+/** Soft locomotive mark — faces left; keep translucent, not neon. */
 function MiniTrain({ className = "" }: { className?: string }) {
   return (
     <Image
@@ -62,12 +62,13 @@ export function TextRejsyCta({
       "rounded-[10px] bg-[var(--paper)] text-[var(--ink)] ring-1 ring-[var(--line)] hover:bg-white",
   };
 
+  // Soft / see-through — muted, not neon red
   const trainClass =
     variant === "red"
-      ? "brightness-[1.12] contrast-[1.08] drop-shadow-[0_0_0.6px_rgba(255,255,255,0.55)]"
+      ? "opacity-[0.58] brightness-[1.7] saturate-[0.2] contrast-[0.9]"
       : variant === "ink"
-        ? "brightness-[1.08] contrast-[1.06]"
-        : "";
+        ? "opacity-[0.55] brightness-[1.35] saturate-[0.3]"
+        : "opacity-[0.48] saturate-[0.4]";
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (lock.current) {
@@ -96,7 +97,7 @@ export function TextRejsyCta({
         <span className="relative inline-flex h-5 w-9 overflow-hidden">
           <span
             className={`absolute inset-0 flex items-center justify-center ${
-              exiting ? "train-exit" : ""
+              exiting ? "train-exit" : "train-idle"
             }`}
           >
             <MiniTrain className={trainClass} />

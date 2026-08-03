@@ -79,14 +79,14 @@ export function TrainAccent() {
           </filter>
         </defs>
       </svg>
-      {/* Start right of center so the left-facing nose sits nearer mid-screen */}
+      {/* Start further right so the left-facing nose sits mid-screen (or slightly right of mid) */}
       <div
-        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] -translate-x-[22%] -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] sm:-translate-x-[26%] md:w-[min(120vw,1360px)] md:-translate-x-[30%]"
+        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] translate-x-[4%] -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] sm:translate-x-[8%] md:w-[min(120vw,1360px)] md:translate-x-[12%]"
         style={{
           WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
           maskImage:
-            "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
         }}
       >
         <div
@@ -96,7 +96,7 @@ export function TrainAccent() {
         >
           <div
             ref={parallaxRef}
-            className="scroll-train opacity-[0.16] will-change-transform sm:opacity-[0.19] md:opacity-[0.22]"
+            className="scroll-train opacity-[0.14] will-change-transform sm:opacity-[0.17] md:opacity-[0.2]"
           >
             <Image
               src="/train-hero.webp"
