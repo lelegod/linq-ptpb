@@ -157,11 +157,11 @@ video {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(-18%);
+    transform: translateX(-10%);
   }
 }
 .train-idle {
-  animation: trainIdle 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: trainIdle 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .train-idle {
