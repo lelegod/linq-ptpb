@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { copy } from "@/content/copy";
 
@@ -19,36 +20,18 @@ function ChatIcon() {
   );
 }
 
-/** Clear blocky locomotive — faces left (same as train-hero). */
+/** Premium red/white locomotive mark — faces left (same as train-hero). */
 function MiniTrain({ className = "" }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      width="24"
-      height="16"
-      viewBox="0 0 24 16"
-      fill="none"
+    <Image
+      src="/train-cta.webp"
+      alt=""
+      width={36}
+      height={20}
+      className={`h-5 w-9 object-contain object-center ${className}`}
       aria-hidden
-    >
-      {/* chimney */}
-      <rect x="4" y="1" width="3" height="2" fill="currentColor" />
-      {/* cab (nose / left) */}
-      <rect x="1" y="3" width="7" height="8" fill="currentColor" />
-      {/* windshield */}
-      <rect x="2.5" y="4.5" width="4" height="3" fill="var(--paper)" />
-      {/* coupler / bumper */}
-      <rect x="0" y="8" width="1.5" height="2" fill="currentColor" />
-      {/* body */}
-      <rect x="8" y="4" width="13" height="7" fill="currentColor" />
-      {/* passenger windows */}
-      <rect x="10" y="5.5" width="2.5" height="2.5" fill="var(--paper)" />
-      <rect x="14" y="5.5" width="2.5" height="2.5" fill="var(--paper)" />
-      <rect x="18" y="5.5" width="2" height="2.5" fill="var(--paper)" />
-      {/* wheels (square = blocky) */}
-      <rect x="3" y="12" width="3" height="3" fill="currentColor" />
-      <rect x="11" y="12" width="3" height="3" fill="currentColor" />
-      <rect x="17" y="12" width="3" height="3" fill="currentColor" />
-    </svg>
+      priority={false}
+    />
   );
 }
 
@@ -80,11 +63,11 @@ export function TextRejsyCta({
   };
 
   const trainClass =
-    variant === "butter"
-      ? "text-[var(--butter-ink)]"
-      : variant === "ghost"
-        ? "text-[var(--ink)]"
-        : "text-white";
+    variant === "red"
+      ? "brightness-[1.12] contrast-[1.08] drop-shadow-[0_0_0.6px_rgba(255,255,255,0.55)]"
+      : variant === "ink"
+        ? "brightness-[1.08] contrast-[1.06]"
+        : "";
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (lock.current) {
@@ -110,7 +93,7 @@ export function TextRejsyCta({
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
-        <span className="relative inline-flex h-4 w-8 overflow-hidden">
+        <span className="relative inline-flex h-5 w-9 overflow-hidden">
           <span
             className={`absolute inset-0 flex items-center justify-center ${
               exiting ? "train-exit" : ""

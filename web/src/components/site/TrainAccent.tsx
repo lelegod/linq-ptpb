@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { TRAIN_PLAY_EVENT } from "@/lib/trainPlay";
 
-/** Blocky train watermark — static by default; glides on Rejsy brand hover/tap. */
+/** Refined train watermark — static by default; glides on Rejsy brand hover/tap. */
 export function TrainAccent() {
   const parallaxRef = useRef<HTMLDivElement>(null);
   const glideRef = useRef<HTMLDivElement>(null);
@@ -35,8 +35,9 @@ export function TrainAccent() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const y = window.scrollY;
-        // train-hero faces left — scroll down moves it forward (negative X)
-        const x = -Math.min(y * 0.1, 40);
+        // Faces left — scroll down moves forward (negative X) from a rightward start
+        // so the nose sits nearer center before travel.
+        const x = -Math.min(y * 0.12, 56);
         const vy = Math.min(y * 0.02, 10);
         el.style.transform = `translate3d(${x}px, ${vy}px, 0)`;
       });
@@ -62,27 +63,30 @@ export function TrainAccent() {
     >
       <svg width="0" height="0" className="absolute" aria-hidden>
         <defs>
-          <filter id="train-blocky" colorInterpolationFilters="sRGB">
+          <filter id="train-refine" colorInterpolationFilters="sRGB">
             <feComponentTransfer>
-              <feFuncR type="discrete" tableValues="0 0.2 0.45 0.7 1" />
-              <feFuncG type="discrete" tableValues="0 0.2 0.45 0.7 1" />
-              <feFuncB type="discrete" tableValues="0 0.2 0.45 0.7 1" />
+              <feFuncR type="gamma" amplitude="1" exponent="0.92" offset="0.02" />
+              <feFuncG type="gamma" amplitude="1" exponent="0.92" offset="0.02" />
+              <feFuncB type="gamma" amplitude="1" exponent="0.92" offset="0.02" />
             </feComponentTransfer>
-            <feConvolveMatrix
-              order="3"
-              kernelMatrix="0 -1 0 -1 5 -1 0 -1 0"
-              preserveAlpha="true"
+            <feColorMatrix
+              type="matrix"
+              values="1.08 0 0 0 0
+                      0 1.02 0 0 0
+                      0 0 1.02 0 0
+                      0 0 0 1 0"
             />
           </filter>
         </defs>
       </svg>
+      {/* Start right of center so the left-facing nose sits nearer mid-screen */}
       <div
-        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] -translate-x-1/2 -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] md:w-[min(120vw,1360px)]"
+        className="absolute left-1/2 top-[52%] w-[min(190vw,980px)] -translate-x-[22%] -translate-y-1/2 sm:top-[50%] sm:w-[min(150vw,1180px)] sm:-translate-x-[26%] md:w-[min(120vw,1360px)] md:-translate-x-[30%]"
         style={{
           WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
           maskImage:
-            "linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
         }}
       >
         <div
@@ -92,7 +96,7 @@ export function TrainAccent() {
         >
           <div
             ref={parallaxRef}
-            className="scroll-train opacity-[0.14] will-change-transform sm:opacity-[0.17] md:opacity-[0.2]"
+            className="scroll-train opacity-[0.16] will-change-transform sm:opacity-[0.19] md:opacity-[0.22]"
           >
             <Image
               src="/train-hero.webp"
@@ -100,7 +104,7 @@ export function TrainAccent() {
               width={1600}
               height={273}
               priority
-              className="train-hero-blocky h-auto w-full select-none"
+              className="train-hero-mark h-auto w-full select-none"
               sizes="(max-width: 640px) 190vw, (max-width: 768px) 150vw, 1360px"
             />
           </div>
