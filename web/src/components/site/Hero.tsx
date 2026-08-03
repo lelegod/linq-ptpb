@@ -6,13 +6,19 @@ import { TextRejsyCta } from "@/components/site/TextRejsyCta";
 import { TrainAccent } from "@/components/site/TrainAccent";
 import { playHeroTrain } from "@/lib/trainPlay";
 
-/** iPhone Messages–style type inside the phone only */
-const imFont =
-  'font-[system-ui,-apple-system,BlinkMacSystemFont,"SF_Pro_Text","SF_Pro_Display","Segoe_UI",sans-serif]';
-
-function U({ children }: { children: React.ReactNode }) {
-  return <span className="underline decoration-white/55 underline-offset-[2px]">{children}</span>;
-}
+const thread = {
+  user1: "aarhus tomorrow around 9",
+  options: `københavn h → aarhus h · sat
+1. 09:03 → 12:17 · 🚆 dsb · 149 kr
+2. 09:33 → 12:47 · 🚆 dsb · 149 kr
+3. 10:03 → 13:17 · 1 change · 89 kr
+   🚶 walk 4 min · 🚆 dsb · Ⓜ️ bus`,
+  hint: "reply 1, 2 or 3 to lock it in",
+  user2: "1",
+  confirm: "🚆 locked in — i'll remind you 25 min before.",
+  reminder:
+    "🕘 leave in 25 min — københavn h, platform 5 · 09:03 to aarhus.",
+};
 
 function Inbound({
   children,
@@ -26,9 +32,7 @@ function Inbound({
       className="pop flex justify-end"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div
-        className={`max-w-[82%] rounded-[18px] rounded-br-[5px] bg-[#007aff] px-[11px] py-[7px] text-[14px] leading-[1.3] tracking-[-0.01em] text-white ${imFont}`}
-      >
+      <div className="max-w-[85%] rounded-[17px] rounded-br-[6px] bg-[var(--inbound)] px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
         {children}
       </div>
     </div>
@@ -38,9 +42,11 @@ function Inbound({
 function Outbound({
   children,
   delay,
+  mono,
 }: {
   children: React.ReactNode;
   delay: number;
+  mono?: boolean;
 }) {
   return (
     <div
@@ -48,7 +54,9 @@ function Outbound({
       style={{ animationDelay: `${delay}ms` }}
     >
       <div
-        className={`max-w-[92%] rounded-[18px] rounded-bl-[5px] bg-[#262629] px-[11px] py-[8px] text-[14px] leading-[1.35] tracking-[-0.01em] text-white ${imFont}`}
+        className={`max-w-[90%] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 text-[13px] leading-snug text-white ${
+          mono ? "font-data whitespace-pre-wrap text-[11px] sm:text-[12px]" : ""
+        }`}
       >
         {children}
       </div>
@@ -56,36 +64,20 @@ function Outbound({
   );
 }
 
-function ItineraryOption({
-  n,
-  from,
-  to,
-  duration,
-  changes,
+function Proactive({
+  children,
+  delay,
 }: {
-  n: number;
-  from: string;
-  to: string;
-  duration: string;
-  changes: string;
+  children: React.ReactNode;
+  delay: number;
 }) {
   return (
-    <div className="flex items-start gap-2">
-      <span className="mt-[1px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[4px] bg-[#0a84ff] text-[11px] font-semibold leading-none text-white">
-        {n}
-      </span>
-      <div className="min-w-0">
-        <p>
-          <U>{from}</U>
-          <span className="text-white/70">{" → "}</span>
-          <U>{to}</U>
-          <span className="text-white/55">
-            {" · "}
-            {duration}
-            {" · "}
-            {changes}
-          </span>
-        </p>
+    <div
+      className="pop mt-2 flex justify-start"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="max-w-[90%] rounded-[17px] rounded-bl-[6px] border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-[13px] leading-snug text-[var(--ink)]">
+        {children}
       </div>
     </div>
   );
@@ -93,107 +85,27 @@ function ItineraryOption({
 
 function ThreadBody() {
   return (
-    <div className={`flex flex-col gap-[5px] px-2.5 pb-3 pt-2 ${imFont}`}>
-      <Inbound delay={620}>aarhus tomorrow around 9</Inbound>
+    <div className="flex flex-col gap-1.5 px-3 pb-4 pt-2">
+      <Inbound delay={620}>{thread.user1}</Inbound>
 
       <div
         className="typing flex justify-start"
         style={{ ["--hide" as string]: "1500ms", animationDelay: "900ms" }}
       >
-        <div className="flex items-center gap-1 rounded-[18px] rounded-bl-[5px] bg-[#262629] px-3 py-2.5">
+        <div className="flex items-center gap-1 rounded-[17px] rounded-bl-[6px] bg-[var(--inbound)] px-3 py-2.5">
           <span className="dot" style={{ animationDelay: "0ms" }} />
           <span className="dot" style={{ animationDelay: "150ms" }} />
           <span className="dot" style={{ animationDelay: "300ms" }} />
         </div>
       </div>
 
-      {/* Options list — iMessage itinerary style */}
-      <Outbound delay={1900}>
-        <div className="space-y-2.5">
-          <p className="text-[13px] text-white/70">
-            København H → Aarhus H · Sat
-          </p>
-
-          <div className="space-y-2 border-t border-white/10 pt-2">
-            <ItineraryOption
-              n={1}
-              from="09:03"
-              to="12:17"
-              duration="3h 14m"
-              changes="0 changes"
-            />
-            <p className="pl-[26px] text-[13px] leading-[1.4] text-white/90">
-              <U>09:03</U>
-              {" · København H"}
-              <br />
-              {"🚆 DSB IC · Track 5"}
-              <br />
-              <U>12:17</U>
-              {" · Aarhus H"}
-            </p>
-          </div>
-
-          <div className="space-y-1.5 border-t border-white/10 pt-2">
-            <ItineraryOption
-              n={2}
-              from="09:33"
-              to="12:47"
-              duration="3h 14m"
-              changes="0 changes"
-            />
-          </div>
-
-          <div className="space-y-1.5 border-t border-white/10 pt-2">
-            <ItineraryOption
-              n={3}
-              from="10:03"
-              to="13:17"
-              duration="3h 14m"
-              changes="1 change"
-            />
-            <p className="pl-[26px] text-[13px] leading-[1.45] text-white/90">
-              <U>10:03</U>
-              {" · København H"}
-              <br />
-              {"🚶 Walk 4 min"}
-              <br />
-              <U>10:07</U>
-              {" · København H · 🚆 DSB"}
-              <br />
-              <U>12:40</U>
-              {" · Skanderborg"}
-              <br />
-              {"🚶 Walk 3 min"}
-              <br />
-              <U>12:48</U>
-              {" · Skanderborg · Ⓜ️ Bus"}
-              <br />
-              <U>13:17</U>
-              {" · Aarhus H"}
-            </p>
-          </div>
-        </div>
+      <Outbound delay={1900} mono>
+        {thread.options}
       </Outbound>
-
-      <Outbound delay={2300}>
-        <span className="text-white/90">Reply 1, 2 or 3 to lock it in.</span>
-      </Outbound>
-
-      <Inbound delay={2700}>1</Inbound>
-
-      <Outbound delay={3100}>
-        {"🚆 Locked in — I'll remind you 25 min before departure."}
-      </Outbound>
-
-      <Outbound delay={3600}>
-        <span>
-          {"🕘 Leave in 25 min — head to "}
-          <U>København H</U>
-          {", platform 5. DSB IC to Aarhus, "}
-          <U>09:03</U>
-          {"."}
-        </span>
-      </Outbound>
+      <Outbound delay={2150}>{thread.hint}</Outbound>
+      <Inbound delay={2500}>{thread.user2}</Inbound>
+      <Outbound delay={2900}>{thread.confirm}</Outbound>
+      <Proactive delay={3500}>{thread.reminder}</Proactive>
     </div>
   );
 }
@@ -269,50 +181,30 @@ export function Hero({
           </a>
         </div>
 
-        <div className="relative mx-auto mt-7 flex w-full max-w-[270px] flex-col items-center sm:max-w-[300px] md:mt-10 md:max-w-[320px]">
+        <div className="relative mx-auto mt-7 flex w-full max-w-[250px] flex-col items-center sm:max-w-[278px] md:mt-10 md:max-w-[300px]">
           <div
-            className="phoneIn relative w-full rounded-[36px] border border-[#1c1c1e] bg-[#1c1c1e] p-[7px] sm:rounded-[44px] sm:p-[9px]"
+            className="phoneIn relative w-full rounded-[32px] border border-[var(--ink)] bg-[var(--ink)] p-[6px] sm:rounded-[42px] sm:p-[8px]"
             style={{ animationDelay: "260ms" }}
           >
-            {/* Dark-mode Messages chrome */}
-            <div className="overflow-hidden rounded-[30px] bg-black sm:rounded-[36px]">
-              <div
-                className={`relative flex items-center justify-center border-b border-white/10 bg-[#1c1c1e] px-3 pb-2.5 pt-3 ${imFont}`}
-              >
-                <div className="absolute left-1/2 top-1.5 h-3 w-14 -translate-x-1/2 rounded-full bg-black sm:h-3.5 sm:w-[72px]" />
+            <div className="overflow-hidden rounded-[26px] bg-[var(--paper)] sm:rounded-[34px]">
+              <div className="relative flex items-center justify-center border-b border-[var(--line)] px-3 pb-2 pt-3">
+                <div className="absolute left-1/2 top-1.5 h-3 w-14 -translate-x-1/2 rounded-full bg-[var(--ink)] sm:h-4 sm:w-20" />
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--red)] text-[11px] font-semibold text-white">
                     R
                   </div>
-                  <span className="text-[13px] font-semibold text-white">
-                    {copy.name}
-                  </span>
+                  <span className="text-[13px] font-semibold">{copy.name}</span>
                 </div>
               </div>
 
-              <div key={run} className="min-h-[340px] bg-black sm:min-h-[380px]">
+              <div key={run}>
                 <ThreadBody />
-              </div>
-
-              {/* Composer — matches screenshot */}
-              <div
-                className={`flex items-center gap-2 border-t border-white/10 bg-black px-2.5 py-2 ${imFont}`}
-              >
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2c2c2e] text-[16px] leading-none text-white/80">
-                  +
-                </div>
-                <div className="flex min-h-8 flex-1 items-center rounded-full bg-[#1c1c1e] px-3 text-[14px] text-white/90 ring-1 ring-white/10">
-                  <span className="text-[#0a84ff]">|</span>
-                </div>
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0a84ff] text-[13px] font-bold text-white">
-                  ↑
-                </div>
               </div>
             </div>
 
             <div
               className="fadeUp pointer-events-none absolute top-[70%] left-[calc(100%+12px)] hidden w-[7.5rem] text-left md:block"
-              style={{ animationDelay: "4000ms" }}
+              style={{ animationDelay: "3700ms" }}
             >
               <div className="mb-1.5 h-[2px] w-2 bg-[var(--red)]" />
               <p className="font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)]">
@@ -323,7 +215,7 @@ export function Hero({
 
           <p
             className="fadeUp mt-3 font-data text-[10px] uppercase tracking-[0.06em] text-[var(--muted)] md:hidden"
-            style={{ animationDelay: "4000ms" }}
+            style={{ animationDelay: "3700ms" }}
           >
             ↑ sent without being asked
           </p>
@@ -339,7 +231,7 @@ export function Hero({
 
         <div
           className="fadeUp mt-8 hidden flex-col items-center gap-3 md:flex"
-          style={{ animationDelay: "4200ms" }}
+          style={{ animationDelay: "4000ms" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
