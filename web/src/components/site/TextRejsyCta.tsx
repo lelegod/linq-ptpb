@@ -1,12 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { copy } from "@/content/copy";
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 function ChatIcon() {
   return (
@@ -19,10 +13,7 @@ function ChatIcon() {
   );
 }
 
-/**
- * Minimal modern EMU mark (faces left) — monoline, currentColor.
- * Photo crops read muddy at 20px; this stays crisp like a premium product icon.
- */
+/** Minimal modern EMU mark — monoline, currentColor, static. */
 function MiniTrain({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -33,14 +24,12 @@ function MiniTrain({ className = "" }: { className?: string }) {
       aria-hidden
       className={className}
     >
-      {/* Body */}
       <path
         d="M40 8.5c0-1.4-1-2.5-2.4-2.5H14.2c-1.1 0-2.1.5-2.7 1.4L8 13.2H4.8c-.7 0-1.3.6-1.3 1.3v2.2c0 .7.6 1.3 1.3 1.3H8l1.2 1.6c.4.5 1 .8 1.6.8h26.8c1.4 0 2.4-1.1 2.4-2.5V8.5Z"
         stroke="currentColor"
         strokeWidth="1.75"
         strokeLinejoin="round"
       />
-      {/* Window band */}
       <path
         d="M12.5 10.2h24.2"
         stroke="currentColor"
@@ -48,12 +37,9 @@ function MiniTrain({ className = "" }: { className?: string }) {
         strokeLinecap="round"
         opacity="0.55"
       />
-      {/* Nose light */}
       <circle cx="9.2" cy="12.4" r="1.15" fill="currentColor" opacity="0.85" />
-      {/* Bogies */}
       <circle cx="16" cy="22.5" r="2.4" stroke="currentColor" strokeWidth="1.6" />
       <circle cx="32.5" cy="22.5" r="2.4" stroke="currentColor" strokeWidth="1.6" />
-      {/* Track hint */}
       <path
         d="M3 26.2h38"
         stroke="currentColor"
@@ -80,9 +66,6 @@ export function TextRejsyCta({
   className?: string;
   showTrain?: boolean;
 }) {
-  const [exiting, setExiting] = useState(false);
-  const lock = useRef(false);
-
   const styles: Record<Variant, string> = {
     red: "rounded-[10px] bg-[var(--red)] text-white hover:opacity-90",
     butter:
@@ -93,42 +76,17 @@ export function TextRejsyCta({
   };
 
   const iconTone =
-    variant === "red" || variant === "ink"
-      ? "opacity-80"
-      : "opacity-70";
-
-  function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    if (lock.current) {
-      e.preventDefault();
-      return;
-    }
-    if (prefersReducedMotion()) return;
-    e.preventDefault();
-    lock.current = true;
-    setExiting(true);
-    window.setTimeout(() => {
-      window.location.href = href;
-      lock.current = false;
-      setExiting(false);
-    }, 750);
-  }
+    variant === "red" || variant === "ink" ? "opacity-80" : "opacity-70";
 
   return (
     <a
       href={href}
-      onClick={onClick}
-      className={`inline-flex min-h-12 items-center justify-center gap-2.5 px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-[filter,opacity] active:opacity-90 ${styles[variant]} ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center gap-2.5 px-6 py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-opacity active:opacity-90 ${styles[variant]} ${className}`}
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
-        <span className="relative inline-flex h-[14px] w-[22px] shrink-0 overflow-hidden">
-          <span
-            className={`absolute inset-0 flex items-center justify-center ${
-              exiting ? "train-exit" : "train-idle"
-            }`}
-          >
-            <MiniTrain className={iconTone} />
-          </span>
+        <span className="inline-flex shrink-0 items-center justify-center">
+          <MiniTrain className={iconTone} />
         </span>
       ) : (
         <span className={variant === "ink" ? "text-[var(--red)]" : "opacity-90"}>

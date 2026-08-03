@@ -150,33 +150,15 @@ video {
   animation: phoneIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Soft idle glide on CTA train mark */
-@keyframes trainIdle {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-10%);
-  }
-}
+/* Soft idle glide on CTA train mark — unused; kept inert for safety */
 .train-idle {
-  animation: trainIdle 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .train-idle {
-    animation: none;
-  }
+  animation: none;
 }
 
-/* Train exits forward (left — matches left-facing train icon) before Messages */
+/* Train exits forward — unused after CTA simplification */
 @keyframes trainExit {
   0% {
     transform: translateX(0);
-    opacity: 1;
-  }
-  70% {
-    transform: translateX(-120%);
     opacity: 1;
   }
   100% {
@@ -185,7 +167,7 @@ video {
   }
 }
 .train-exit {
-  animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: none;
 }
 
 /* Soft centered watermark — muted red, clean edges */
@@ -193,23 +175,20 @@ video {
   filter: contrast(1.08) saturate(0.78) brightness(1.06);
 }
 
-/* Hero watermark: one-shot glide on Rejsy brand hover / tap */
+/* One signature motion: short brand-triggered glide */
 @keyframes trainGlideOnce {
   0% {
     transform: translate3d(0, 0, 0);
   }
-  14% {
-    transform: translate3d(-12%, 0, 0);
-  }
-  86% {
-    transform: translate3d(14%, 0, 0);
+  40% {
+    transform: translate3d(-8%, 0, 0);
   }
   100% {
     transform: translate3d(0, 0, 0);
   }
 }
 .train-glide-play {
-  animation: trainGlideOnce 3.1s cubic-bezier(0.45, 0.05, 0.22, 1) 1;
+  animation: trainGlideOnce 1.4s cubic-bezier(0.4, 0.05, 0.2, 1) 1;
 }
 
 @keyframes trackPulse {
