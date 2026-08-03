@@ -188,9 +188,9 @@ video {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Refined graphic watermark — clean, slightly cooler, less neon red */
+/* Soft centered watermark — muted red, clean edges */
 .train-hero-mark {
-  filter: url(#train-refine) contrast(1.14) saturate(0.92) brightness(1.04);
+  filter: contrast(1.08) saturate(0.78) brightness(1.06);
 }
 
 /* Hero watermark: one-shot glide on Rejsy brand hover / tap */
@@ -199,10 +199,10 @@ video {
     transform: translate3d(0, 0, 0);
   }
   14% {
-    transform: translate3d(-18%, 0, 0);
+    transform: translate3d(-12%, 0, 0);
   }
   86% {
-    transform: translate3d(20%, 0, 0);
+    transform: translate3d(14%, 0, 0);
   }
   100% {
     transform: translate3d(0, 0, 0);
