@@ -38,8 +38,8 @@ export const copy = {
   problemResult: "aarhus tomorrow around 9",
   problemCaption: "Fig. 0  Fragmentation → one blue bubble.",
   bentoLabel: "(1) Everything it does",
-  bentoHeading: "Four apps, one thread.",
-  bentoCaption: "Fig. 1  Five capabilities, one conversation.",
+  bentoHeading: "One agent. The whole trip.",
+  bentoCaption: "Fig. 1  Plan · pick · map · leave-now — still just Messages.",
   pricingEyebrow:
     "Cheaper than one København→Aarhus ticket, for every trip you ever take.",
   plusCta: "Unlock after 3 trips",

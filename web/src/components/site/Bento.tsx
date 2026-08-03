@@ -44,24 +44,17 @@ function IconBell() {
   );
 }
 
-function IconDatabase() {
+function IconMap() {
   return (
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <ellipse
-        cx="12"
-        cy="6"
-        rx="7"
-        ry="3"
+      <path
+        d="M9 4.5 3.5 7v12.5L9 17l6 2.5L20.5 17V4.5L15 7 9 4.5Z"
         stroke="currentColor"
         strokeWidth="1.6"
+        strokeLinejoin="round"
       />
       <path
-        d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
-      <path
-        d="M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"
+        d="M9 4.5V17M15 7v12.5"
         stroke="currentColor"
         strokeWidth="1.6"
       />
@@ -71,7 +64,7 @@ function IconDatabase() {
 
 function OutBubble({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 max-w-[min(100%,260px)] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+    <div className="mt-4 max-w-[min(100%,280px)] rounded-[17px] rounded-bl-[6px] bg-[var(--bubble)] px-3 py-2 font-data text-[11px] leading-relaxed text-white">
       {children}
     </div>
   );
@@ -79,7 +72,7 @@ function OutBubble({ children }: { children: React.ReactNode }) {
 
 function ProactiveBubble({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 max-w-[min(100%,260px)] rounded-[17px] rounded-bl-[6px] border border-white/35 bg-white/10 px-3 py-2 font-data text-[11px] leading-relaxed text-white">
+    <div className="mt-4 max-w-[min(100%,280px)] rounded-[17px] rounded-bl-[6px] border border-white/35 bg-white/10 px-3 py-2 font-data text-[11px] leading-relaxed text-white">
       {children}
     </div>
   );
@@ -103,20 +96,20 @@ export function Bento() {
                 <IconMessage />
               </div>
               <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                React for later trains.
+                Plan in plain language.
               </h3>
               <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
-                Tap 🔽 on the options and it pages forward. No retyping your
-                search, no starting over.
+                Text where you&apos;re going. Rejsy answers with real options —
+                times, operators, and how you get there.
               </p>
               <OutBubble>
-                4. 10:33 → 13:47 · dsb · 149 kr
+                københavn h → aarhus h · sat
                 <br />
-                5. 11:03 → 14:17 · dsb · 89 kr
+                1. 09:03 → 12:17 · 🚆 dsb · 149 kr
                 <br />
-                <span className="mt-1 inline-block rounded bg-white/20 px-1.5 py-0.5">
-                  🔽
-                </span>
+                2. 09:33 → 12:47 · 🚆 dsb · 149 kr
+                <br />
+                3. 10:03 → 13:17 · 🚶🚆Ⓜ️ · 89 kr
               </OutBubble>
             </div>
 
@@ -126,31 +119,31 @@ export function Bento() {
                   <IconBell />
                 </div>
                 <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                  It texts you first.
+                  Leave-now, unprompted.
                 </h3>
                 <p className="mt-2 text-[14px] leading-[1.55] text-[var(--red-soft)]">
-                  25 minutes before departure, with your platform. You didn&apos;t
-                  ask.
+                  25 minutes before departure — station and platform included.
+                  You never have to ask.
                 </p>
                 <ProactiveBubble>
-                  🕘 leave in 25 min — platform 3, københavn h
+                  🕘 leave in 25 min — københavn h, platform 5 · 09:03
                 </ProactiveBubble>
               </div>
               <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
                 <div className="mb-3">
-                  <IconDatabase />
+                  <IconMap />
                 </div>
                 <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                  Never a guess.
+                  Map + Buy on DSB.
                 </h3>
                 <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
-                  Every price, platform and delay comes from Rejseplanen. If we
-                  don&apos;t have it, we say so.
+                  Lock a trip and get the route card. Tickets stay with the
+                  operator — we never touch your card.
                 </p>
                 <OutBubble>
-                  on time · platform 3
+                  🗺️ københavn h → aarhus h
                   <br />
-                  149 kr · dsb · direct
+                  sat 09:03 · [ Buy on DSB → ]
                 </OutBubble>
               </div>
             </div>
@@ -159,32 +152,40 @@ export function Bento() {
           <div className="grid gap-2.5 sm:gap-[10px] md:grid-cols-2">
             <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
               <div className="mb-3">
-                <IconMessage />
+                <IconTicket />
               </div>
               <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                Plan by text.
+                Live from Rejseplanen.
               </h3>
               <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
-                &ldquo;odense before 5&rdquo; is a complete search.
+                Prices, platforms, and delays come from the source. If we
+                don&apos;t have it, we say so — never a guess.
               </p>
               <OutBubble>
-                got it — 3 options to odense before 17:00
+                on time · platform 5
+                <br />
+                149 kr · 🚆 dsb · direct
               </OutBubble>
             </div>
             <div className="rounded-[14px] bg-[var(--card-dark)] p-4 text-white sm:p-5">
               <div className="mb-3">
-                <IconTicket />
+                <IconMessage />
               </div>
               <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                One tap to book.
+                Later trains, one tap.
               </h3>
               <p className="mt-2 text-[14px] leading-[1.55] text-[var(--slate-inv)]">
-                Straight into DSB. We never touch your card.
+                React 🔽 on the options and Rejsy pages forward. No retyping
+                your search.
               </p>
               <OutBubble>
-                🗺️ københavn h → aarhus h
+                4. 10:33 → 13:47 · 🚆 dsb · 149 kr
                 <br />
-                sat 09:03 · [ See route → ]
+                5. 11:03 → 14:17 · 🚆 dsb · 89 kr
+                <br />
+                <span className="mt-1 inline-block rounded bg-white/20 px-1.5 py-0.5">
+                  🔽
+                </span>
               </OutBubble>
             </div>
           </div>
