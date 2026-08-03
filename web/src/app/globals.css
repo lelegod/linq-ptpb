@@ -150,23 +150,28 @@ video {
   animation: phoneIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Train exits sideways before opening Messages */
+/* Train exits forward (left — matches left-facing train icon) before Messages */
 @keyframes trainExit {
   0% {
     transform: translateX(0);
     opacity: 1;
   }
   70% {
-    transform: translateX(120%);
+    transform: translateX(-120%);
     opacity: 1;
   }
   100% {
-    transform: translateX(140%);
+    transform: translateX(-140%);
     opacity: 0;
   }
 }
 .train-exit {
   animation: trainExit 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Harden photoreal train-hero into a chunkier graphic watermark */
+.train-hero-blocky {
+  filter: url(#train-blocky) contrast(1.35) saturate(1.45) brightness(1.04);
 }
 
 /* Hero watermark: one-shot glide on Rejsy brand hover / tap */

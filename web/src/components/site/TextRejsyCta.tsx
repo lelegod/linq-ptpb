@@ -19,30 +19,35 @@ function ChatIcon() {
   );
 }
 
+/** Clear blocky locomotive — faces left (same as train-hero). */
 function MiniTrain({ className = "" }: { className?: string }) {
   return (
     <svg
       className={className}
-      width="22"
-      height="14"
-      viewBox="0 0 22 14"
+      width="24"
+      height="16"
+      viewBox="0 0 24 16"
       fill="none"
       aria-hidden
     >
-      <rect x="1" y="2" width="16" height="8" rx="2" fill="currentColor" />
-      <rect
-        x="17"
-        y="4"
-        width="4"
-        height="5"
-        rx="1"
-        fill="currentColor"
-        opacity="0.7"
-      />
-      <circle cx="5" cy="11.5" r="1.5" fill="currentColor" />
-      <circle cx="13" cy="11.5" r="1.5" fill="currentColor" />
-      <rect x="3" y="4" width="3" height="3" rx="0.5" fill="var(--paper)" />
-      <rect x="8" y="4" width="3" height="3" rx="0.5" fill="var(--paper)" />
+      {/* chimney */}
+      <rect x="4" y="1" width="3" height="2" fill="currentColor" />
+      {/* cab (nose / left) */}
+      <rect x="1" y="3" width="7" height="8" fill="currentColor" />
+      {/* windshield */}
+      <rect x="2.5" y="4.5" width="4" height="3" fill="var(--paper)" />
+      {/* coupler / bumper */}
+      <rect x="0" y="8" width="1.5" height="2" fill="currentColor" />
+      {/* body */}
+      <rect x="8" y="4" width="13" height="7" fill="currentColor" />
+      {/* passenger windows */}
+      <rect x="10" y="5.5" width="2.5" height="2.5" fill="var(--paper)" />
+      <rect x="14" y="5.5" width="2.5" height="2.5" fill="var(--paper)" />
+      <rect x="18" y="5.5" width="2" height="2.5" fill="var(--paper)" />
+      {/* wheels (square = blocky) */}
+      <rect x="3" y="12" width="3" height="3" fill="currentColor" />
+      <rect x="11" y="12" width="3" height="3" fill="currentColor" />
+      <rect x="17" y="12" width="3" height="3" fill="currentColor" />
     </svg>
   );
 }
@@ -75,7 +80,11 @@ export function TextRejsyCta({
   };
 
   const trainClass =
-    variant === "butter" ? "text-[var(--butter-ink)]" : "text-white";
+    variant === "butter"
+      ? "text-[var(--butter-ink)]"
+      : variant === "ghost"
+        ? "text-[var(--ink)]"
+        : "text-white";
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (lock.current) {
@@ -101,7 +110,7 @@ export function TextRejsyCta({
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
-        <span className="relative inline-flex h-4 w-7 overflow-hidden">
+        <span className="relative inline-flex h-4 w-8 overflow-hidden">
           <span
             className={`absolute inset-0 flex items-center justify-center ${
               exiting ? "train-exit" : ""
