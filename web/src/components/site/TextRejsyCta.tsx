@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState } from "react";
 import { copy } from "@/content/copy";
 
@@ -20,18 +19,49 @@ function ChatIcon() {
   );
 }
 
-/** Soft locomotive mark — faces left; keep translucent, not neon. */
+/**
+ * Minimal modern EMU mark (faces left) — monoline, currentColor.
+ * Photo crops read muddy at 20px; this stays crisp like a premium product icon.
+ */
 function MiniTrain({ className = "" }: { className?: string }) {
   return (
-    <Image
-      src="/train-cta.webp"
-      alt=""
-      width={36}
-      height={20}
-      className={`h-5 w-9 object-contain object-center ${className}`}
+    <svg
+      width="22"
+      height="14"
+      viewBox="0 0 44 28"
+      fill="none"
       aria-hidden
-      priority={false}
-    />
+      className={className}
+    >
+      {/* Body */}
+      <path
+        d="M40 8.5c0-1.4-1-2.5-2.4-2.5H14.2c-1.1 0-2.1.5-2.7 1.4L8 13.2H4.8c-.7 0-1.3.6-1.3 1.3v2.2c0 .7.6 1.3 1.3 1.3H8l1.2 1.6c.4.5 1 .8 1.6.8h26.8c1.4 0 2.4-1.1 2.4-2.5V8.5Z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+      {/* Window band */}
+      <path
+        d="M12.5 10.2h24.2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.55"
+      />
+      {/* Nose light */}
+      <circle cx="9.2" cy="12.4" r="1.15" fill="currentColor" opacity="0.85" />
+      {/* Bogies */}
+      <circle cx="16" cy="22.5" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="32.5" cy="22.5" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+      {/* Track hint */}
+      <path
+        d="M3 26.2h38"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        opacity="0.35"
+      />
+    </svg>
   );
 }
 
@@ -62,13 +92,10 @@ export function TextRejsyCta({
       "rounded-[10px] bg-[var(--paper)] text-[var(--ink)] ring-1 ring-[var(--line)] hover:bg-white",
   };
 
-  // Soft / see-through — muted, not neon red
-  const trainClass =
-    variant === "red"
-      ? "opacity-[0.58] brightness-[1.7] saturate-[0.2] contrast-[0.9]"
-      : variant === "ink"
-        ? "opacity-[0.55] brightness-[1.35] saturate-[0.3]"
-        : "opacity-[0.48] saturate-[0.4]";
+  const iconTone =
+    variant === "red" || variant === "ink"
+      ? "opacity-80"
+      : "opacity-70";
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (lock.current) {
@@ -94,13 +121,13 @@ export function TextRejsyCta({
       aria-label={label ?? copy.cta}
     >
       {showTrain ? (
-        <span className="relative inline-flex h-5 w-9 overflow-hidden">
+        <span className="relative inline-flex h-[14px] w-[22px] shrink-0 overflow-hidden">
           <span
             className={`absolute inset-0 flex items-center justify-center ${
               exiting ? "train-exit" : "train-idle"
             }`}
           >
-            <MiniTrain className={trainClass} />
+            <MiniTrain className={iconTone} />
           </span>
         </span>
       ) : (
